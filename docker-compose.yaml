@@ -2,7 +2,8 @@ version: '3.8'
 
 services:
   db:
-    build: .
+    build: 
+      context: ./database
     container_name: zlaplokal_db
     platform: linux/amd64
     environment:
@@ -12,8 +13,30 @@ services:
       - "1433:1433"
     volumes:
       - sqlserver_data:/var/opt/mssql
-      - ./backups:/var/opt/mssql/backups
-      - ./restore.sh:/restore.sh
+      - ./database/backups:/var/opt/mssql/backups
+      - ./database/restore.sh:/restore.sh
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.django
+    container_name: zlaplokal_backend
+    depends_on:
+      - db
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - MSSQL_SA_PASSWORD=${MSSQL_SA_PASSWORD}
+      - COMMISSION_RATE=${COMMISSION_RATE}
+  frontend:
+    image: nginx:alpine
+    container_name: zlaplokal_frontend
+    volumes:
+      - ./frontend:/usr/share/nginx/html
+    ports:
+      - "80:80"
 
 volumes:
   sqlserver_data:
