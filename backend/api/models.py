@@ -1,86 +1,68 @@
 from django.db import models
 
-class Users(models.Model):
-    user_id = models.AutoField(db_column='User_ID', primary_key=True)
-    email = models.CharField(db_column='Email', unique=True, max_length=255)
-    password_hash = models.CharField(db_column='Password_Hash', max_length=255)
-    role = models.CharField(db_column='Role', max_length=50, blank=True, null=True)
-    created_at = models.DateTimeField(db_column='Created_At', blank=True, null=True)
-    is_active = models.BooleanField(db_column='Is_Active', blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'Users'
-
 class Provinces(models.Model):
-    province_id = models.AutoField(db_column='Province_ID', primary_key=True)
-    name = models.CharField(db_column='Name', unique=True, max_length=100)
+    province_id = models.AutoField(primary_key=True, db_column='Province_ID')
+    name = models.CharField(max_length=100, unique=True, db_column='Name')
 
     class Meta:
-        managed = False
         db_table = 'Provinces'
+        managed = True
+
+    def __str__(self):
+        return self.name
 
 class Cities(models.Model):
-    city_id = models.AutoField(db_column='City_ID', primary_key=True)
-    province = models.ForeignKey(Provinces, models.DO_NOTHING, db_column='Province_ID', blank=True, null=True)
-    name = models.CharField(db_column='Name', max_length=100)
+    city_id = models.AutoField(primary_key=True, db_column='City_ID')
+    province = models.ForeignKey(Provinces, on_delete=models.CASCADE, db_column='Province_ID')
+    name = models.CharField(max_length=100, db_column='Name')
 
     class Meta:
-        managed = False
         db_table = 'Cities'
+        managed = True
 
-class Categories(models.Model):
-    category_id = models.AutoField(db_column='Category_ID', primary_key=True)
-    category_name = models.CharField(db_column='Category_Name', unique=True, max_length=100)
+    def __str__(self):
+        return self.name
+
+# DODAJEMY TĘ KLASĘ - TO JEJ BRAKOWAŁO:
+class Users(models.Model):
+    user_id = models.AutoField(primary_key=True, db_column='User_ID')
+    email = models.EmailField(unique=True, db_column='Email')
+    password_hash = models.CharField(max_length=255, db_column='Password_Hash')
+    role = models.CharField(max_length=50, db_column='Role')
 
     class Meta:
-        managed = False
-        db_table = 'Categories'
+        db_table = 'Users'
+        managed = True
+
+    def __str__(self):
+        return self.email
 
 class Venues(models.Model):
-    venue_id = models.AutoField(db_column='Venue_ID', primary_key=True)
-    owner = models.ForeignKey(Users, models.DO_NOTHING, db_column='Owner_ID', blank=True, null=True)
-    city = models.ForeignKey(Cities, models.DO_NOTHING, db_column='City_ID', blank=True, null=True)
-    name = models.CharField(db_column='Name', max_length=255)
-    description = models.TextField(db_column='Description', blank=True, null=True)
-    capacity = models.IntegerField(db_column='Capacity', blank=True, null=True)
-    price_per_day = models.DecimalField(db_column='Price_Per_Day', max_digits=19, decimal_places=4)
-    deposit = models.DecimalField(db_column='Deposit', max_digits=19, decimal_places=4, blank=True, null=True)
-    is_deleted = models.BooleanField(db_column='Is_Deleted', blank=True, null=True)
+    venue_id = models.AutoField(primary_key=True, db_column='Venue_ID')
+    owner = models.ForeignKey(Users, on_delete=models.CASCADE, db_column='Owner_ID', null=True)
+    city = models.ForeignKey(Cities, on_delete=models.CASCADE, db_column='City_ID')
+    name = models.CharField(max_length=255, db_column='Name')
+    description = models.TextField(null=True, blank=True, db_column='Description')
+    capacity = models.IntegerField(null=True, blank=True, db_column='Capacity')
+    price_per_day = models.DecimalField(max_digits=19, decimal_places=4, db_column='Price_Per_Day')
+    photo = models.ImageField(upload_to='venues_photos/', null=True, blank=True)
 
     class Meta:
-        managed = False
         db_table = 'Venues'
+        managed = True
+
+    def __str__(self):
+        return self.name
 
 class Bookings(models.Model):
-    booking_id = models.AutoField(db_column='Booking_ID', primary_key=True)
-    venue = models.ForeignKey(Venues, models.DO_NOTHING, db_column='Venue_ID', blank=True, null=True)
-    renter = models.ForeignKey(Users, models.DO_NOTHING, db_column='Renter_ID', blank=True, null=True)
+    booking_id = models.AutoField(primary_key=True, db_column='Booking_ID')
+    venue = models.ForeignKey(Venues, on_delete=models.CASCADE, db_column='Venue_ID')
+    renter = models.ForeignKey(Users, on_delete=models.CASCADE, db_column='Renter_ID', null=True)
     start_date = models.DateTimeField(db_column='Start_Date')
     end_date = models.DateTimeField(db_column='End_Date')
-    total_cost = models.DecimalField(db_column='Total_Cost', max_digits=19, decimal_places=4, blank=True, null=True)
-    system_commission = models.DecimalField(db_column='System_Commission', max_digits=19, decimal_places=4, blank=True, null=True)
-    status = models.CharField(db_column='Status', max_length=50, blank=True, null=True)
+    total_cost = models.DecimalField(max_digits=19, decimal_places=4, null=True, blank=True, db_column='Total_Cost')
+    status = models.CharField(max_length=50, default='Pending', db_column='Status')
 
     class Meta:
-        managed = False
         db_table = 'Bookings'
-
-class VenueCategory(models.Model):
-    id = models.AutoField(primary_key=True)
-    venue = models.ForeignKey(Venues, models.DO_NOTHING, db_column='Venue_ID')
-    category = models.ForeignKey(Categories, models.DO_NOTHING, db_column='Category_ID')
-
-    class Meta:
-        managed = False
-        db_table = 'Venue_Category'
-        unique_together = (('venue', 'category'),)
-
-class SystemConfig(models.Model):
-    config_id = models.AutoField(db_column='Config_ID', primary_key=True)
-    commission_rate = models.DecimalField(db_column='Commission_Rate', max_digits=5, decimal_places=2)
-    updated_at = models.DateTimeField(db_column='Updated_At', blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'System_Config'
+        managed = True

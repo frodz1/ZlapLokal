@@ -24,16 +24,25 @@ def login_view(request):
     return Response({'error': 'Błędne dane'}, status=400)
 
 @api_view(['POST'])
-@permission_classes([AllowAny])
 def register_view(request):
     username = request.data.get('username')
-    password = request.data.get('password')
     email = request.data.get('email')
+    password = request.data.get('password')
+
+    if not username or not password or not email:
+        return Response({'error': 'Wszystkie pola są wymagane'}, status=status.HTTP_400_BAD_REQUEST)
+
     if User.objects.filter(username=username).exists():
-        return Response({'error': 'Użytkownik istnieje'}, status=400)
-    user = User.objects.create_user(username=username, password=password, email=email)
-    token, _ = Token.objects.get_or_create(user=user)
-    return Response({'token': token.key, 'user_id': user.id, 'username': user.username}, status=201)
+        return Response({'error': 'Użytkownik o takim loginie już istnieje'}, status=status.HTTP_400_BAD_REQUEST)
+
+    user = User.objects.create_user(username=username, email=email, password=password)
+    
+    token, created = Token.objects.get_or_create(user=user)
+    return Response({
+        'token': token.key,
+        'username': user.username,
+        'message': 'Konto utworzone pomyślnie'
+    }, status=status.HTTP_201_CREATED)
 
 @api_view(['GET', 'POST'])
 @permission_classes([AllowAny])

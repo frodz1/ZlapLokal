@@ -25,6 +25,7 @@ services:
       - db
     volumes:
       - ./backend:/app
+      - ./backend/media:/app/media
     ports:
       - "8000:8000"
     environment:
