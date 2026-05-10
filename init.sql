@@ -10,112 +10,142 @@ GO
 USE ZlapLokalDB;
 GO
 
-CREATE TABLE Wojewodztwa (
-    ID_Wojewodztwa INT PRIMARY KEY IDENTITY(1,1),
-    Nazwa NVARCHAR(100) NOT NULL
+CREATE TABLE Provinces (
+    Province_ID INT PRIMARY KEY IDENTITY(1,1),
+    Name NVARCHAR(100) NOT NULL UNIQUE
 );
 
-CREATE TABLE Miasta (
-    ID_Miasta INT PRIMARY KEY IDENTITY(1,1),
-    ID_Wojewodztwa INT FOREIGN KEY REFERENCES Wojewodztwa(ID_Wojewodztwa),
-    Nazwa NVARCHAR(100) NOT NULL
+CREATE TABLE Cities (
+    City_ID INT PRIMARY KEY IDENTITY(1,1),
+    Province_ID INT FOREIGN KEY REFERENCES Provinces(Province_ID),
+    Name NVARCHAR(100) NOT NULL
 );
 
-CREATE TABLE Kategorie (
-    ID_Kategorii INT PRIMARY KEY IDENTITY(1,1),
-    Nazwa_Kategorii NVARCHAR(100) NOT NULL
+CREATE TABLE Categories (
+    Category_ID INT PRIMARY KEY IDENTITY(1,1),
+    Category_Name NVARCHAR(100) NOT NULL UNIQUE
 );
 
 CREATE TABLE System_Config (
-    ID_Wpisu INT PRIMARY KEY IDENTITY(1,1),
-    Stawka_Prowizji DECIMAL(5,2) NOT NULL,
-    Data_Aktualizacji DATETIME DEFAULT GETDATE()
+    Config_ID INT PRIMARY KEY IDENTITY(1,1),
+    Commission_Rate DECIMAL(5,2) NOT NULL,
+    Updated_At DATETIME DEFAULT GETDATE()
 );
 
-CREATE TABLE Uzytkownicy (
-    ID_Uzytkownika INT PRIMARY KEY IDENTITY(1,1),
+CREATE TABLE Users (
+    User_ID INT PRIMARY KEY IDENTITY(1,1),
     Email NVARCHAR(255) UNIQUE NOT NULL,
-    Haslo_Hash NVARCHAR(255) NOT NULL,
-    Rola NVARCHAR(50) CHECK (Rola IN ('Role_Admin', 'Role_Owner', 'Role_Renter')),
-    Data_Utworzenia DATETIME DEFAULT GETDATE(),
-    Czy_Aktywny BIT DEFAULT 1
+    Password_Hash NVARCHAR(255) NOT NULL,
+    Role NVARCHAR(50) CHECK (Role IN ('Role_Admin', 'Role_Owner', 'Role_Renter')),
+    Created_At DATETIME DEFAULT GETDATE(),
+    Is_Active BIT DEFAULT 1
 );
 
-CREATE TABLE Lokale (
-    ID_Lokalu INT PRIMARY KEY IDENTITY(1,1),
-    ID_Wlasciciela INT FOREIGN KEY REFERENCES Uzytkownicy(ID_Uzytkownika),
-    ID_Miasta INT FOREIGN KEY REFERENCES Miasta(ID_Miasta),
-    Nazwa NVARCHAR(255) NOT NULL,
-    Opis NVARCHAR(MAX),
-    Pojemnosc INT,
-    Cena_Doba MONEY NOT NULL,
-    Kaucja MONEY DEFAULT 0,
-    Czy_Usuniety BIT DEFAULT 0
+CREATE TABLE Venues (
+    Venue_ID INT PRIMARY KEY IDENTITY(1,1),
+    Owner_ID INT FOREIGN KEY REFERENCES Users(User_ID),
+    City_ID INT FOREIGN KEY REFERENCES Cities(City_ID),
+    Name NVARCHAR(255) NOT NULL,
+    Description NVARCHAR(MAX),
+    Capacity INT,
+    Price_Per_Day MONEY NOT NULL,
+    Deposit MONEY DEFAULT 0 CHECK (Deposit >= 0),
+    Is_Deleted BIT DEFAULT 0
 );
 
-CREATE TABLE Lokal_Kategoria (
-    ID_Lokalu INT FOREIGN KEY REFERENCES Lokale(ID_Lokalu),
-    ID_Kategorii INT FOREIGN KEY REFERENCES Kategorie(ID_Kategorii),
-    PRIMARY KEY (ID_Lokalu, ID_Kategorii)
+CREATE TABLE Venue_Category (
+    Venue_ID INT FOREIGN KEY REFERENCES Venues(Venue_ID),
+    Category_ID INT FOREIGN KEY REFERENCES Categories(Category_ID),
+    PRIMARY KEY (Venue_ID, Category_ID)
 );
 
-CREATE TABLE Rezerwacje (
-    ID_Rezerwacji INT PRIMARY KEY IDENTITY(1,1),
-    ID_Lokalu INT FOREIGN KEY REFERENCES Lokale(ID_Lokalu),
-    ID_Wynajmujacego INT FOREIGN KEY REFERENCES Uzytkownicy(ID_Uzytkownika),
-    Data_Od DATETIME NOT NULL,
-    Data_Do DATETIME NOT NULL,
-    Koszt_Calkowity MONEY,
-    Prowizja_Systemu MONEY,
-    Status NVARCHAR(50) DEFAULT 'Oczekujaca'
+
+CREATE TABLE Bookings (
+    Booking_ID INT PRIMARY KEY IDENTITY(1,1),
+    Venue_ID INT FOREIGN KEY REFERENCES Venues(Venue_ID),
+    Renter_ID INT FOREIGN KEY REFERENCES Users(User_ID),
+    Start_Date DATETIME NOT NULL,
+    End_Date DATETIME NOT NULL,
+    Total_Cost MONEY,
+    System_Commission MONEY,
+    Status NVARCHAR(50) DEFAULT 'Pending' CHECK (Status IN ('Pending', 'Confirmed', 'Paid', 'Completed', 'Cancelled')),
+    CONSTRAINT CHK_Dates CHECK (Start_Date < End_Date)
 );
 GO
 
 CREATE TRIGGER TRG_CheckOverbooking
-ON Rezerwacje
+ON Bookings
 AFTER INSERT, UPDATE
 AS
 BEGIN
     IF EXISTS (
         SELECT 1 
-        FROM Rezerwacje r
-        JOIN inserted i ON r.ID_Lokalu = i.ID_Lokalu
-        WHERE r.ID_Rezerwacji <> i.ID_Rezerwacji 
-          AND i.Data_Od < r.Data_Do 
-          AND i.Data_Do > r.Data_Od 
+        FROM Bookings b
+        JOIN inserted i ON b.Venue_ID = i.Venue_ID
+        WHERE b.Booking_ID <> i.Booking_ID 
+          AND i.Start_Date < b.End_Date 
+          AND i.End_Date > b.Start_Date 
+          AND b.Status NOT IN ('Cancelled')
     )
     BEGIN
-        RAISERROR ('Blad 50000: Termin jest juz zajety dla tego lokalu!', 16, 1);
+        RAISERROR ('Error 50000: The dates are already booked for this venue!', 16, 1);
         ROLLBACK TRANSACTION; 
     END
 END;
 GO
 
 CREATE TRIGGER TRG_CalculateCost
-ON Rezerwacje
+ON Bookings
 AFTER INSERT
 AS
 BEGIN
-    UPDATE r
+    UPDATE b
     SET 
-        Koszt_Calkowity = l.Cena_Doba * DATEDIFF(day, i.Data_Od, i.Data_Do),
-        Prowizja_Systemu = (l.Cena_Doba * DATEDIFF(day, i.Data_Od, i.Data_Do)) * (c.Stawka_Prowizji / 100.0)
-    FROM Rezerwacje r
-    JOIN inserted i ON r.ID_Rezerwacji = i.ID_Rezerwacji
-    JOIN Lokale l ON i.ID_Lokalu = l.ID_Lokalu
-    CROSS JOIN (SELECT TOP 1 Stawka_Prowizji FROM System_Config ORDER BY ID_Wpisu DESC) c;
+        Total_Cost = v.Price_Per_Day * DATEDIFF(day, i.Start_Date, i.End_Date),
+        System_Commission = (v.Price_Per_Day * DATEDIFF(day, i.Start_Date, i.End_Date)) * (c.Commission_Rate / 100.0)
+    FROM Bookings b
+    JOIN inserted i ON b.Booking_ID = i.Booking_ID
+    JOIN Venues v ON i.Venue_ID = v.Venue_ID
+    CROSS JOIN (SELECT TOP 1 Commission_Rate FROM System_Config ORDER BY Config_ID DESC) c;
 END;
 GO
 
-INSERT INTO Wojewodztwa (Nazwa) VALUES ('Dolnoslaskie'), ('Mazowieckie');
-INSERT INTO Miasta (ID_Wojewodztwa, Nazwa) VALUES (1, 'Wroclaw'), (2, 'Warszawa');
-INSERT INTO Kategorie (Nazwa_Kategorii) VALUES ('Sala bankietowa'), ('Loft industrialny');
-INSERT INTO System_Config (Stawka_Prowizji) VALUES (10.00);
-INSERT INTO Uzytkownicy (Email, Haslo_Hash, Rola) VALUES
-('admin@zlaplokal.pl', 'hash1', 'Role_Admin'),
-('jan.owner@gmail.com', 'hash2', 'Role_Owner'),
-('anna.renter@wp.pl', 'hash3', 'Role_Renter');
-INSERT INTO Lokale (ID_Wlasciciela, ID_Miasta, Nazwa, Cena_Doba) VALUES (2, 1, 'Perla Wroclawia', 1500.00);
-INSERT INTO Rezerwacje (ID_Lokalu, ID_Wynajmujacego, Data_Od, Data_Do, Status) 
-VALUES (1, 3, '2026-05-01 14:00:00', '2026-05-03 12:00:00', 'Potwierdzona');
-GO
+-- Testowe dane potem mozna usunac
+INSERT INTO System_Config (Commission_Rate) VALUES (12.50);
+
+INSERT INTO Provinces (Name) VALUES 
+('Dolnoslaskie'), ('Mazowieckie'), ('Malopolskie'), ('Pomorskie');
+
+INSERT INTO Cities (Province_ID, Name) VALUES 
+(1, 'Wroclaw'), (2, 'Warszawa'), (3, 'Krakow'), (4, 'Gdansk'), (4, 'Sopot');
+
+INSERT INTO Categories (Category_Name) VALUES 
+('Sala bankietowa'), ('Loft industrialny'), ('Klub nocny'), ('Plener i Ogród'), ('Willa z basenem');
+
+INSERT INTO Users (Email, Password_Hash, Role) VALUES
+('admin@zlaplokal.pl', '$2a$12$eImiTXuWVxfM37uY4JANjQ==', 'Role_Admin'),
+('kontakt@event-space.pl', '$2a$12$eImiTXuWVxfM37uY4JANjQ==', 'Role_Owner'),
+('janusz.wlasciciel@gmail.com', '$2a$12$eImiTXuWVxfM37uY4JANjQ==', 'Role_Owner'),
+('tomasz.imprezowicz@wp.pl', '$2a$12$eImiTXuWVxfM37uY4JANjQ==', 'Role_Renter'),
+('kasia.studentka@stud.pwr.edu.pl', '$2a$12$eImiTXuWVxfM37uY4JANjQ==', 'Role_Renter');
+
+INSERT INTO Venues (Owner_ID, City_ID, Name, Description, Capacity, Price_Per_Day, Deposit) VALUES 
+(2, 1, 'Neonowy Loft Nad Odra', 'Surowe, ceglane wnetrze z profesjonalnym naglosnieniem i oswietleniem LED. Idealne na 18-stki i imprezy firmowe.', 50, 1200.00, 500.00),
+(3, 2, 'Willa Konstancin', 'Ekskluzywna willa z duzym ogrodem i basenem. Wymagana doplata za sprzatanie. Tylko dla osob powyzej 25 roku zycia.', 120, 3500.00, 2000.00),
+(2, 4, 'Hala Stocznia', 'Ogromna przestrzen w starym budynku stoczniowym. Brak ciszy nocnej! Mozliwosc wjazdu foodtruckiem do srodka.', 300, 4500.00, 3000.00),
+(3, 3, 'Ogród z Alpakami', 'Cicha i spokojna przestrzen na obrzezach miasta. W cenie wynajmu dostep do altany, grilla i... dwoch alpak.', 30, 800.00, 200.00);
+
+INSERT INTO Venue_Category (Venue_ID, Category_ID) VALUES 
+(1, 2), (1, 3), (2, 5), (3, 2), (3, 3), (4, 4);
+
+INSERT INTO Bookings (Venue_ID, Renter_ID, Start_Date, End_Date, Status) 
+VALUES (1, 4, '2026-05-01 16:00:00', '2026-05-03 10:00:00', 'Paid');
+
+INSERT INTO Bookings (Venue_ID, Renter_ID, Start_Date, End_Date, Status) 
+VALUES (3, 5, '2026-05-15 14:00:00', '2026-05-17 12:00:00', 'Confirmed');
+
+INSERT INTO Bookings (Venue_ID, Renter_ID, Start_Date, End_Date, Status) 
+VALUES (2, 4, '2026-06-10 12:00:00', '2026-06-12 12:00:00', 'Pending');
+
+INSERT INTO Bookings (Venue_ID, Renter_ID, Start_Date, End_Date, Status) 
+VALUES (4, 5, '2026-07-01 10:00:00', '2026-07-02 18:00:00', 'Cancelled');
