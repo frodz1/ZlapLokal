@@ -1,0 +1,3 @@
+1. Zmień nazwę pliku .env.example na .env i uzupełnij w nim zmienne środowiskowe.
+2. Odpal projekt poleceniem: docker-compose up -d --build.
+3. Gdy kontenery już wystartują, stwórz strukturę bazy danych poleceniem: docker-compose exec backend python manage.py migrate

@@ -6,8 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ZłapLokal.pl — Znajdź swoją przestrzeń</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --brand: #f43f5e;
@@ -114,51 +113,37 @@
 
 <body class="pb-20">
 
-    <div id="toast"
-        class="fixed bottom-8 left-1/2 -translate-x-1/2 z-[1000] px-8 py-4 rounded-2xl text-white font-bold shadow-2xl transition-all duration-300 translate-y-4 opacity-0 pointer-events-none text-center">
+    <div id="toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 z-[1000] px-8 py-4 rounded-2xl text-white font-bold shadow-2xl transition-all duration-300 translate-y-4 opacity-0 pointer-events-none text-center">
     </div>
 
     <nav class="nav-glass sticky top-0 z-50 h-20 flex items-center">
         <div class="container mx-auto px-6 flex justify-between items-center">
             <div class="flex items-center gap-2 cursor-pointer group" onclick="showSection('browse')">
-                <div
-                    class="w-10 h-10 bg-rose-500 rounded-xl flex items-center justify-center text-white font-black text-xl group-hover:rotate-12 transition-transform">
-                    Z</div>
-                <span class="text-2xl font-black tracking-tighter text-slate-900">Złap<span
-                        class="text-rose-500">Lokal</span></span>
+                <div class="w-10 h-10 bg-rose-500 rounded-xl flex items-center justify-center text-white font-black text-xl group-hover:rotate-12 transition-transform">Z</div>
+                <span class="text-2xl font-black tracking-tighter text-slate-900">Złap<span class="text-rose-500">Lokal</span></span>
             </div>
 
             <div class="flex items-center gap-4 md:gap-8 text-sm font-bold text-slate-500">
-                <button onclick="showSection('browse')"
-                    class="hover:text-rose-500 transition-colors">Przeglądaj</button>
-                <button onclick="showSection('bookings')"
-                    class="hover:text-rose-500 transition-colors">Rezerwacje</button>
-                <button onclick="showSection('account')"
-                    class="px-6 py-3 bg-slate-900 text-white rounded-2xl hover:bg-rose-500 transition-all shadow-lg text-xs md:text-sm"
-                    id="nav-user">Moje konto</button>
+                <button onclick="showSection('browse')" class="hover:text-rose-500 transition-colors">Przeglądaj</button>
+                <button onclick="showSection('bookings')" class="hover:text-rose-500 transition-colors">Rezerwacje</button>
+                <button onclick="showSection('account')" class="px-6 py-3 bg-slate-900 text-white rounded-2xl hover:bg-rose-500 transition-all shadow-lg text-xs md:text-sm" id="nav-user">Moje konto</button>
             </div>
         </div>
     </nav>
 
     <header id="hero-section" class="hero-gradient pt-24 pb-32 px-6 text-center">
         <div class="max-w-4xl mx-auto">
-            <h1 class="text-5xl md:text-7xl font-black text-white mb-10 tracking-tight leading-[1.1]">Znajdź <span
-                    class="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 to-orange-400">idealny</span>
-                lokal w Twojej okolicy.</h1>
+            <h1 class="text-5xl md:text-7xl font-black text-white mb-10 tracking-tight leading-[1.1]">Znajdź <span class="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 to-orange-400">idealny</span> lokal w Twojej okolicy.</h1>
 
             <div class="max-w-2xl mx-auto search-pill p-2 rounded-3xl flex items-center gap-2">
-                <input type="text" id="search-input" oninput="filterVenues()"
-                    placeholder="Wpisz miasto lub nazwę lokalu..."
-                    class="bg-transparent border-none focus:ring-0 text-white placeholder-slate-400 flex-1 px-6 text-lg outline-none">
-                <button onclick="filterVenues()"
-                    class="btn-fancy text-white px-8 py-4 rounded-2xl font-bold">Szukaj</button>
+                <input type="text" id="search-input" oninput="filterVenues()" placeholder="Wpisz miasto lub nazwę lokalu..." class="bg-transparent border-none focus:ring-0 text-white placeholder-slate-400 flex-1 px-6 text-lg outline-none">
+                <button onclick="filterVenues()" class="btn-fancy text-white px-8 py-4 rounded-2xl font-bold">Szukaj</button>
             </div>
 
             <div class="flex justify-center gap-16 mt-20">
                 <div class="text-center">
                     <p class="text-4xl font-black text-white" id="stat-venues">0</p>
-                    <p class="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mt-2">Dostępnych lokali
-                    </p>
+                    <p class="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mt-2">Dostępnych lokali</p>
                 </div>
                 <div class="text-center">
                     <p class="text-4xl font-black text-white" id="stat-cities">0</p>
@@ -172,8 +157,7 @@
 
         <section id="section-browse" class="section-content">
             <div class="flex items-center justify-end mb-8">
-                <div class="bg-white/80 backdrop-blur px-5 py-2.5 rounded-2xl shadow-sm border border-slate-100 font-black text-slate-500 text-[10px] uppercase tracking-widest"
-                    id="venues-count">0 wyników</div>
+                <div class="bg-white/80 backdrop-blur px-5 py-2.5 rounded-2xl shadow-sm border border-slate-100 font-black text-slate-500 text-[10px] uppercase tracking-widest" id="venues-count">0 wyników</div>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="venues-grid"></div>
         </section>
@@ -182,8 +166,7 @@
             <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-8">
                 <div class="bg-white rounded-[40px] p-8 md:p-10 shadow-xl border border-slate-50">
                     <div class="flex items-center gap-3 mb-8">
-                        <div class="w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center text-xl">🛒
-                        </div>
+                        <div class="w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center text-xl">🛒</div>
                         <h2 class="text-2xl font-black tracking-tight text-slate-900">Twoje rezerwacje</h2>
                     </div>
                     <div id="bookings-list" class="space-y-4 text-slate-900">
@@ -193,14 +176,11 @@
 
                 <div class="bg-white rounded-[40px] p-8 md:p-10 shadow-xl border border-slate-50">
                     <div class="flex items-center gap-3 mb-8">
-                        <div
-                            class="w-12 h-12 bg-rose-100 rounded-2xl flex items-center justify-center text-xl text-rose-500">
-                            🏠</div>
+                        <div class="w-12 h-12 bg-rose-100 rounded-2xl flex items-center justify-center text-xl text-rose-500">🏠</div>
                         <h2 class="text-2xl font-black tracking-tight text-slate-900">Twoje lokale</h2>
                     </div>
                     <div id="my-venues-list" class="space-y-4">
-                        <div class="text-center py-12 text-slate-400 font-medium">Nie wystawiłeś jeszcze żadnego lokalu.
-                        </div>
+                        <div class="text-center py-12 text-slate-400 font-medium">Nie wystawiłeś jeszcze żadnego lokalu.</div>
                     </div>
                 </div>
             </div>
@@ -211,77 +191,48 @@
                 <h2 class="text-3xl font-black mb-2 tracking-tight text-slate-900">Witaj ponownie</h2>
                 <p class="text-slate-400 mb-8 font-medium">Zaloguj się, aby zarządzać lokalami</p>
                 <div class="space-y-4">
-                    <input type="text" id="l-user" placeholder="Login"
-                        class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500 transition-all text-slate-900">
-                    <input type="password" id="l-pass" placeholder="Hasło"
-                        class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500 transition-all text-slate-900">
-                    <button onclick="handleLogin()"
-                        class="w-full btn-fancy text-white py-4 rounded-2xl font-black mt-4 uppercase tracking-wider text-sm">Zaloguj
-                        się</button>
-                    <p class="text-center text-xs font-bold text-slate-400 mt-6 cursor-pointer"
-                        onclick="toggleAuth('reg')">Nie masz konta? <span class="text-rose-500">Zarejestruj się</span>
-                    </p>
+                    <input type="text" id="l-user" placeholder="Login" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500 transition-all text-slate-900">
+                    <input type="password" id="l-pass" placeholder="Hasło" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500 transition-all text-slate-900">
+                    <button onclick="handleLogin()" class="w-full btn-fancy text-white py-4 rounded-2xl font-black mt-4 uppercase tracking-wider text-sm">Zaloguj się</button>
+                    <p class="text-center text-xs font-bold text-slate-400 mt-6 cursor-pointer" onclick="toggleAuth('reg')">Nie masz konta? <span class="text-rose-500">Zarejestruj się</span></p>
                 </div>
             </div>
 
-            <div id="register-form"
-                class="max-w-md mx-auto bg-white rounded-[40px] p-10 shadow-2xl hidden text-slate-900">
+            <div id="register-form" class="max-w-md mx-auto bg-white rounded-[40px] p-10 shadow-2xl hidden text-slate-900">
                 <h2 class="text-3xl font-black mb-2 tracking-tight">Dołącz do nas</h2>
                 <p class="text-slate-400 mb-8 font-medium">Stwórz darmowe konto</p>
                 <div class="space-y-4">
-                    <input type="text" id="r-user" placeholder="Login"
-                        class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500 transition-all text-slate-900">
-                    <input type="email" id="r-email" placeholder="Email"
-                        class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500 transition-all text-slate-900">
-                    <input type="password" id="r-pass" placeholder="Hasło"
-                        class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500 transition-all text-slate-900">
-                    <button onclick="handleRegister()"
-                        class="w-full btn-fancy text-white py-4 rounded-2xl font-black mt-4 uppercase tracking-widest text-sm">Zarejestruj
-                        się</button>
-                    <p class="text-center text-xs font-bold text-slate-400 mt-6 cursor-pointer"
-                        onclick="toggleAuth('login')">Masz już konto? <span class="text-rose-500">Zaloguj się</span></p>
+                    <input type="text" id="r-user" placeholder="Login" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500 transition-all text-slate-900">
+                    <input type="email" id="r-email" placeholder="Email" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500 transition-all text-slate-900">
+                    <input type="password" id="r-pass" placeholder="Hasło" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500 transition-all text-slate-900">
+                    <button onclick="handleRegister()" class="w-full btn-fancy text-white py-4 rounded-2xl font-black mt-4 uppercase tracking-widest text-sm">Zarejestruj się</button>
+                    <p class="text-center text-xs font-bold text-slate-400 mt-6 cursor-pointer" onclick="toggleAuth('login')">Masz już konto? <span class="text-rose-500">Zaloguj się</span></p>
                 </div>
             </div>
 
             <div id="user-profile" class="max-w-5xl mx-auto grid md:grid-cols-3 gap-8 hidden pt-10 text-slate-900">
-                <div
-                    class="md:col-span-1 bg-white rounded-[40px] p-8 shadow-xl border border-slate-50 text-center h-fit">
-                    <div
-                        class="w-20 h-20 bg-rose-50 rounded-3xl mx-auto flex items-center justify-center text-rose-500 text-3xl mb-4 font-black">
-                        👤</div>
+                <div class="md:col-span-1 bg-white rounded-[40px] p-8 shadow-xl border border-slate-50 text-center h-fit">
+                    <div class="w-20 h-20 bg-rose-50 rounded-3xl mx-auto flex items-center justify-center text-rose-500 text-3xl mb-4 font-black">👤</div>
                     <h3 class="text-xl font-black mb-1" id="display-user">Użytkownik</h3>
                     <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-8">Konto aktywne</p>
-                    <button onclick="showSection('bookings')"
-                        class="w-full py-4 bg-rose-500 text-white rounded-2xl font-bold hover:bg-rose-600 transition-all text-sm mb-3">Zarządzaj
-                        rezerwacjami</button>
-                    <button onclick="handleLogout()"
-                        class="w-full py-4 border-2 border-slate-100 rounded-2xl font-bold text-slate-500 hover:bg-slate-50 transition-all text-sm">Wyloguj
-                        się</button>
+                    <button onclick="showSection('bookings')" class="w-full py-4 bg-rose-500 text-white rounded-2xl font-bold hover:bg-rose-600 transition-all text-sm mb-3">Zarządzaj rezerwacjami</button>
+                    <button onclick="handleLogout()" class="w-full py-4 border-2 border-slate-100 rounded-2xl font-bold text-slate-500 hover:bg-slate-50 transition-all text-sm">Wyloguj się</button>
                 </div>
 
                 <div class="md:col-span-2 bg-white rounded-[40px] p-10 shadow-xl border border-slate-50">
                     <h2 class="text-2xl font-black mb-8 tracking-tight text-slate-900">Dodaj nową ofertę</h2>
                     <div class="grid grid-cols-2 gap-4">
-                        <input type="text" id="v-name" placeholder="Nazwa lokalu"
-                            class="col-span-2 w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500">
-                        <input type="number" id="v-price" placeholder="Cena za dobę (PLN)"
-                            class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500">
-                        <input type="text" id="v-desc" placeholder="Krótki opis"
-                            class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500">
-                        <select id="v-city"
-                            class="col-span-2 w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500 text-slate-600 appearance-none">
+                        <input type="text" id="v-name" placeholder="Nazwa lokalu" class="col-span-2 w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500">
+                        <input type="number" id="v-price" placeholder="Cena za dobę (PLN)" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500">
+                        <input type="text" id="v-desc" placeholder="Krótki opis" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500">
+                        <select id="v-city" class="col-span-2 w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500 text-slate-600 appearance-none">
                             <option value="">Wybierz miasto...</option>
                         </select>
                         <div class="col-span-2">
-                            <label
-                                class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 ml-4">Zdjęcie
-                                główne</label>
-                            <input type="file" id="v-image"
-                                class="w-full p-4 bg-slate-50 rounded-2xl file:mr-4 file:py-2 file:px-6 file:rounded-xl file:border-0 file:text-xs file:font-black file:bg-rose-50 file:text-rose-600">
+                            <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 ml-4">Zdjęcie główne</label>
+                            <input type="file" id="v-image" class="w-full p-4 bg-slate-50 rounded-2xl file:mr-4 file:py-2 file:px-6 file:rounded-xl file:border-0 file:text-xs file:font-black file:bg-rose-50 file:text-rose-600">
                         </div>
-                        <button onclick="submitVenue()"
-                            class="col-span-2 btn-fancy text-white py-4 rounded-2xl font-black mt-4 uppercase tracking-widest text-sm">Opublikuj
-                            ofertę</button>
+                        <button onclick="submitVenue()" class="col-span-2 btn-fancy text-white py-4 rounded-2xl font-black mt-4 uppercase tracking-widest text-sm">Opublikuj ofertę</button>
                     </div>
                 </div>
             </div>
@@ -290,42 +241,31 @@
 
     <div id="booking-modal" class="fixed inset-0 z-[100] flex items-center justify-center p-6 hidden">
         <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-md" onclick="closeModal()"></div>
-        <div
-            class="relative bg-white w-full max-w-xl rounded-[48px] shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300">
+        <div class="relative bg-white w-full max-w-xl rounded-[48px] shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300">
             <div id="modal-thumb" class="h-72 bg-slate-100"></div>
             <div class="p-10 text-slate-900">
-                <span id="modal-city"
-                    class="text-[10px] font-black text-rose-500 uppercase tracking-[0.2em]">Lokalizacja</span>
+                <span id="modal-city" class="text-[10px] font-black text-rose-500 uppercase tracking-[0.2em]">Lokalizacja</span>
                 <h2 id="modal-title" class="text-3xl font-black text-slate-900 mb-8 tracking-tight">Nazwa Lokalu</h2>
 
                 <div class="grid grid-cols-2 gap-4 mb-8">
                     <div>
-                        <label
-                            class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-2">Od
-                            kiedy</label>
-                        <input type="date" id="start" max="2030-12-31" oninput="calcTotal()"
-                            class="w-full px-6 py-4 bg-slate-50 rounded-2xl border-none outline-none focus:ring-2 ring-rose-500 font-bold text-sm">
+                        <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-2">Od kiedy</label>
+                        <input type="date" id="start" max="2030-12-31" oninput="calcTotal()" class="w-full px-6 py-4 bg-slate-50 rounded-2xl border-none outline-none focus:ring-2 ring-rose-500 font-bold text-sm">
                     </div>
                     <div>
-                        <label
-                            class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-2">Do
-                            kiedy</label>
-                        <input type="date" id="end" max="2030-12-31" oninput="calcTotal()"
-                            class="w-full px-6 py-4 bg-slate-50 rounded-2xl border-none outline-none focus:ring-2 ring-rose-500 font-bold text-sm">
+                        <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-2">Do kiedy</label>
+                        <input type="date" id="end" max="2030-12-31" oninput="calcTotal()" class="w-full px-6 py-4 bg-slate-50 rounded-2xl border-none outline-none focus:ring-2 ring-rose-500 font-bold text-sm">
                     </div>
                 </div>
 
-                <div id="total-row"
-                    class="hidden flex items-center justify-between p-6 bg-slate-900 text-white rounded-3xl mb-8">
+                <div id="total-row" class="hidden flex items-center justify-between p-6 bg-slate-900 text-white rounded-3xl mb-8">
                     <span class="font-bold text-slate-400 text-xs uppercase tracking-widest">Suma z opłatami</span>
                     <span id="total-val" class="text-2xl font-black text-white">0 zł</span>
                 </div>
 
                 <div class="flex gap-4">
-                    <button onclick="closeModal()"
-                        class="flex-1 py-4 border-2 border-slate-100 rounded-2xl font-bold text-slate-400 text-sm">Cofnij</button>
-                    <button onclick="submitBooking()"
-                        class="flex-[2] btn-fancy text-white py-4 rounded-2xl font-black uppercase tracking-widest text-xs">Rezerwuję</button>
+                    <button onclick="closeModal()" class="flex-1 py-4 border-2 border-slate-100 rounded-2xl font-bold text-slate-400 text-sm">Cofnij</button>
+                    <button onclick="submitBooking()" class="flex-[2] btn-fancy text-white py-4 rounded-2xl font-black uppercase tracking-widest text-xs">Rezerwuję</button>
                 </div>
             </div>
         </div>
@@ -335,6 +275,19 @@
         const API = 'http://localhost:8000/api';
         let currentVenue = null;
         let allVenues = [];
+        let COMMISSION_RATE = 0.10;
+
+        async function fetchConfig() {
+            try {
+                const r = await fetch(`${API}/config/`);
+                if (r.ok) {
+                    const data = await r.json();
+                    COMMISSION_RATE = data.commission_rate / 100;
+                }
+            } catch(e) { 
+                console.error(e); 
+            }
+        }
 
         function toast(msg, type = '') {
             const t = document.getElementById('toast');
@@ -442,10 +395,13 @@
             const p = parseFloat(document.getElementById('booking-modal').dataset.price);
 
             if (s && e && s <= e) {
-                const start = new Date(s);
-                const end = new Date(e);
-                const days = Math.floor((end - start) / 86400000) + 1;
-                const rawTotal = days * p * 1.1;
+                const start = new Date(s + 'T00:00:00');
+                const end = new Date(e + 'T00:00:00');
+                
+                const diffTime = Math.abs(end - start);
+                const days = Math.round(diffTime / 86400000) + 1;
+                
+                const rawTotal = days * p * (1 + COMMISSION_RATE);
                 const finalTotal = Math.round(rawTotal);
 
                 document.getElementById('total-val').textContent = finalTotal + ' zł';
@@ -503,7 +459,7 @@
                     toast(data.error || 'Błąd rejestracji', 'error');
                 }
             } catch (error) {
-                console.error("Błąd sieci:", error);
+                console.error(error);
                 toast('Błąd połączenia z serwerem', 'error');
             }
         }
@@ -578,7 +534,7 @@
                     </div>
                 `}).join('');
             } catch (e) {
-                console.error("Błąd pobierania rezerwacji:", e);
+                console.error(e);
             }
         }
 
@@ -600,7 +556,7 @@
                 } else {
                     toast('Błąd podczas anulowania', 'error');
                 }
-            } catch (e) { console.error("Błąd sieci:", e); }
+            } catch (e) { console.error(e); }
         }
 
         async function payBooking(id) {
@@ -621,9 +577,8 @@
                 } else {
                     toast('Błąd podczas płatności', 'error');
                 }
-            } catch (e) { console.error("Błąd sieci:", e); }
+            } catch (e) { console.error(e); }
         }
-
 
         async function fetchMyVenues() {
             const list = document.getElementById('my-venues-list');
@@ -725,7 +680,7 @@
                 if (!sel) return;
                 sel.innerHTML = '<option value="">Wybierz miasto...</option>' +
                     cities.map(c => `<option value="${c.city_id}">${c.name}</option>`).join('');
-            } catch (e) { console.error('Błąd ładowania miast', e); }
+            } catch (e) { console.error(e); }
         }
 
         async function submitBooking() {
@@ -767,7 +722,10 @@
             }
         }
 
-        fetchVenues(); checkAuth(); loadCitiesIntoSelect();
+        fetchConfig(); 
+        fetchVenues(); 
+        checkAuth(); 
+        loadCitiesIntoSelect();
     </script>
 </body>
 
