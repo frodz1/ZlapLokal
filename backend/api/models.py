@@ -26,6 +26,7 @@ class Cities(models.Model):
 # DODAJEMY TĘ KLASĘ - TO JEJ BRAKOWAŁO:
 class Users(models.Model):
     user_id = models.AutoField(primary_key=True, db_column='User_ID')
+    username = models.CharField(max_length=255, unique=True, db_column='Username')
     email = models.EmailField(unique=True, db_column='Email')
     password_hash = models.CharField(max_length=255, db_column='Password_Hash')
     role = models.CharField(max_length=50, db_column='Role')
@@ -60,7 +61,7 @@ class Bookings(models.Model):
     renter = models.ForeignKey(Users, on_delete=models.CASCADE, db_column='Renter_ID', null=True)
     start_date = models.DateTimeField(db_column='Start_Date')
     end_date = models.DateTimeField(db_column='End_Date')
-    total_cost = models.DecimalField(max_digits=19, decimal_places=4, null=True, blank=True, db_column='Total_Cost')
+    total_cost = models.DecimalField(max_digits=19, decimal_places=4, null=True, blank=True, db_column='Total_Price')
     status = models.CharField(max_length=50, default='Pending', db_column='Status')
 
     class Meta:

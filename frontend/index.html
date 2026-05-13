@@ -67,6 +67,23 @@
             box-shadow: 0 8px 20px rgba(244, 63, 94, 0.3);
         }
 
+        .btn-pay {
+            background: #10b981;
+            transition: all 0.3s ease;
+        }
+        .btn-pay:hover {
+            background: #059669;
+            transform: translateY(-1px);
+        }
+
+        .btn-delete {
+            color: #94a3b8;
+            transition: all 0.2s ease;
+        }
+        .btn-delete:hover {
+            color: #f43f5e;
+        }
+
         .search-pill {
             background: rgba(255,255,255,0.05);
             border: 1px solid rgba(255,255,255,0.12);
@@ -80,12 +97,17 @@
             overflow: hidden;
         }
 
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(0.5);
+            cursor: pointer;
+        }
+        
         .hidden { display: none !important; }
     </style>
 </head>
 <body class="pb-20">
 
-    <div id="toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 z-[1000] px-8 py-4 rounded-2xl text-white font-bold shadow-2xl transition-all duration-300 translate-y-4 opacity-0 pointer-events-none"></div>
+    <div id="toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 z-[1000] px-8 py-4 rounded-2xl text-white font-bold shadow-2xl transition-all duration-300 translate-y-4 opacity-0 pointer-events-none text-center"></div>
 
     <nav class="nav-glass sticky top-0 z-50 h-20 flex items-center">
         <div class="container mx-auto px-6 flex justify-between items-center">
@@ -95,8 +117,8 @@
             </div>
             
             <div class="flex items-center gap-4 md:gap-8 text-sm font-bold text-slate-500">
-                <button onclick="showSection('browse')" class="hover:text-rose-500 transition-colors hidden md:block">Przeglądaj</button>
-                <button onclick="showSection('bookings')" class="hover:text-rose-500 transition-colors hidden md:block">Rezerwacje</button>
+                <button onclick="showSection('browse')" class="hover:text-rose-500 transition-colors">Przeglądaj</button>
+                <button onclick="showSection('bookings')" class="hover:text-rose-500 transition-colors">Rezerwacje</button>
                 <button onclick="showSection('account')" class="px-6 py-3 bg-slate-900 text-white rounded-2xl hover:bg-rose-500 transition-all shadow-lg text-xs md:text-sm" id="nav-user">Moje konto</button>
             </div>
         </div>
@@ -134,46 +156,64 @@
         </section>
 
         <section id="section-bookings" class="section-content hidden pt-10">
-            <div class="max-w-3xl mx-auto bg-white rounded-[40px] p-8 md:p-12 shadow-xl border border-slate-50">
-                <h2 class="text-3xl font-black mb-8 tracking-tight">Twoje rezerwacje</h2>
-                <div id="bookings-list" class="space-y-4"></div>
+            <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-8">
+                <div class="bg-white rounded-[40px] p-8 md:p-10 shadow-xl border border-slate-50">
+                    <div class="flex items-center gap-3 mb-8">
+                        <div class="w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center text-xl">🛒</div>
+                        <h2 class="text-2xl font-black tracking-tight text-slate-900">Twoje rezerwacje</h2>
+                    </div>
+                    <div id="bookings-list" class="space-y-4 text-slate-900">
+                        <div class="text-center py-12 text-slate-400 font-medium">Brak aktywnych rezerwacji.</div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-[40px] p-8 md:p-10 shadow-xl border border-slate-50">
+                    <div class="flex items-center gap-3 mb-8">
+                        <div class="w-12 h-12 bg-rose-100 rounded-2xl flex items-center justify-center text-xl text-rose-500">🏠</div>
+                        <h2 class="text-2xl font-black tracking-tight text-slate-900">Twoje lokale</h2>
+                    </div>
+                    <div id="my-venues-list" class="space-y-4">
+                        <div class="text-center py-12 text-slate-400 font-medium">Nie wystawiłeś jeszcze żadnego lokalu.</div>
+                    </div>
+                </div>
             </div>
         </section>
 
         <section id="section-account" class="section-content hidden pt-10">
             <div id="login-form" class="max-w-md mx-auto bg-white rounded-[40px] p-10 shadow-2xl">
-                <h2 class="text-3xl font-black mb-2 tracking-tight">Witaj ponownie</h2>
-                <p class="text-slate-400 mb-8 font-medium">Zaloguj się do swojego konta</p>
+                <h2 class="text-3xl font-black mb-2 tracking-tight text-slate-900">Witaj ponownie</h2>
+                <p class="text-slate-400 mb-8 font-medium">Zaloguj się, aby zarządzać lokalami</p>
                 <div class="space-y-4">
-                    <input type="text" id="l-user" placeholder="Login" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500 transition-all">
-                    <input type="password" id="l-pass" placeholder="Hasło" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500 transition-all">
+                    <input type="text" id="l-user" placeholder="Login" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500 transition-all text-slate-900">
+                    <input type="password" id="l-pass" placeholder="Hasło" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500 transition-all text-slate-900">
                     <button onclick="handleLogin()" class="w-full btn-fancy text-white py-4 rounded-2xl font-black mt-4 uppercase tracking-wider text-sm">Zaloguj się</button>
                     <p class="text-center text-xs font-bold text-slate-400 mt-6 cursor-pointer" onclick="toggleAuth('reg')">Nie masz konta? <span class="text-rose-500">Zarejestruj się</span></p>
                 </div>
             </div>
 
-            <div id="register-form" class="max-w-md mx-auto bg-white rounded-[40px] p-10 shadow-2xl hidden">
+            <div id="register-form" class="max-w-md mx-auto bg-white rounded-[40px] p-10 shadow-2xl hidden text-slate-900">
                 <h2 class="text-3xl font-black mb-2 tracking-tight">Dołącz do nas</h2>
-                <p class="text-slate-400 mb-8 font-medium">Stwórz konto i rezerwuj lokale</p>
+                <p class="text-slate-400 mb-8 font-medium">Stwórz darmowe konto</p>
                 <div class="space-y-4">
-                    <input type="text" id="r-user" placeholder="Login" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500 transition-all">
-                    <input type="email" id="r-email" placeholder="Email" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500 transition-all">
-                    <input type="password" id="r-pass" placeholder="Hasło" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500 transition-all">
-                    <button onclick="handleRegister()" class="w-full btn-fancy text-white py-4 rounded-2xl font-black mt-4 uppercase tracking-widest text-sm">Stwórz konto</button>
+                    <input type="text" id="r-user" placeholder="Login" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500 transition-all text-slate-900">
+                    <input type="email" id="r-email" placeholder="Email" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500 transition-all text-slate-900">
+                    <input type="password" id="r-pass" placeholder="Hasło" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500 transition-all text-slate-900">
+                    <button onclick="handleRegister()" class="w-full btn-fancy text-white py-4 rounded-2xl font-black mt-4 uppercase tracking-widest text-sm">Zarejestruj się</button>
                     <p class="text-center text-xs font-bold text-slate-400 mt-6 cursor-pointer" onclick="toggleAuth('login')">Masz już konto? <span class="text-rose-500">Zaloguj się</span></p>
                 </div>
             </div>
             
-            <div id="user-profile" class="max-w-5xl mx-auto grid md:grid-cols-3 gap-8 hidden pt-10">
+            <div id="user-profile" class="max-w-5xl mx-auto grid md:grid-cols-3 gap-8 hidden pt-10 text-slate-900">
                 <div class="md:col-span-1 bg-white rounded-[40px] p-8 shadow-xl border border-slate-50 text-center h-fit">
                     <div class="w-20 h-20 bg-rose-50 rounded-3xl mx-auto flex items-center justify-center text-rose-500 text-3xl mb-4 font-black">👤</div>
                     <h3 class="text-xl font-black mb-1" id="display-user">Użytkownik</h3>
                     <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-8">Konto aktywne</p>
+                    <button onclick="showSection('bookings')" class="w-full py-4 bg-rose-500 text-white rounded-2xl font-bold hover:bg-rose-600 transition-all text-sm mb-3">Zarządzaj rezerwacjami</button>
                     <button onclick="handleLogout()" class="w-full py-4 border-2 border-slate-100 rounded-2xl font-bold text-slate-500 hover:bg-slate-50 transition-all text-sm">Wyloguj się</button>
                 </div>
 
                 <div class="md:col-span-2 bg-white rounded-[40px] p-10 shadow-xl border border-slate-50">
-                    <h2 class="text-2xl font-black mb-8 tracking-tight">Dodaj nową ofertę</h2>
+                    <h2 class="text-2xl font-black mb-8 tracking-tight text-slate-900">Dodaj nową ofertę</h2>
                     <div class="grid grid-cols-2 gap-4">
                         <input type="text" id="v-name" placeholder="Nazwa lokalu" class="col-span-2 w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500">
                         <input type="number" id="v-price" placeholder="Cena za dobę (PLN)" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500">
@@ -193,23 +233,26 @@
         <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-md" onclick="closeModal()"></div>
         <div class="relative bg-white w-full max-w-xl rounded-[48px] shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300">
             <div id="modal-thumb" class="h-72 bg-slate-100"></div>
-            <div class="p-10">
+            <div class="p-10 text-slate-900">
                 <span id="modal-city" class="text-[10px] font-black text-rose-500 uppercase tracking-[0.2em]">Lokalizacja</span>
                 <h2 id="modal-title" class="text-3xl font-black text-slate-900 mb-8 tracking-tight">Nazwa Lokalu</h2>
+                
                 <div class="grid grid-cols-2 gap-4 mb-8">
                     <div>
                         <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-2">Od kiedy</label>
-                        <input type="date" id="start" oninput="calcTotal()" class="w-full px-6 py-4 bg-slate-50 rounded-2xl border-none outline-none focus:ring-2 ring-rose-500 font-bold text-sm">
+                        <input type="date" id="start" max="2030-12-31" oninput="calcTotal()" class="w-full px-6 py-4 bg-slate-50 rounded-2xl border-none outline-none focus:ring-2 ring-rose-500 font-bold text-sm">
                     </div>
                     <div>
                         <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-2">Do kiedy</label>
-                        <input type="date" id="end" oninput="calcTotal()" class="w-full px-6 py-4 bg-slate-50 rounded-2xl border-none outline-none focus:ring-2 ring-rose-500 font-bold text-sm">
+                        <input type="date" id="end" max="2030-12-31" oninput="calcTotal()" class="w-full px-6 py-4 bg-slate-50 rounded-2xl border-none outline-none focus:ring-2 ring-rose-500 font-bold text-sm">
                     </div>
                 </div>
+
                 <div id="total-row" class="hidden flex items-center justify-between p-6 bg-slate-900 text-white rounded-3xl mb-8">
                     <span class="font-bold text-slate-400 text-xs uppercase tracking-widest">Suma z opłatami</span>
-                    <span id="total-val" class="text-2xl font-black">0 zł</span>
+                    <span id="total-val" class="text-2xl font-black text-white">0 zł</span>
                 </div>
+
                 <div class="flex gap-4">
                     <button onclick="closeModal()" class="flex-1 py-4 border-2 border-slate-100 rounded-2xl font-bold text-slate-400 text-sm">Cofnij</button>
                     <button onclick="submitBooking()" class="flex-[2] btn-fancy text-white py-4 rounded-2xl font-black uppercase tracking-widest text-xs">Rezerwuję</button>
@@ -240,68 +283,26 @@
             document.getElementById(`section-${id}`).classList.remove('hidden');
             const hero = document.getElementById('hero-section');
             id === 'browse' ? hero.classList.remove('hidden') : hero.classList.add('hidden');
+            
             if (id === 'browse') fetchVenues();
-            if (id === 'bookings') fetchBookings();
+            if (id === 'bookings') {
+                fetchBookings(); 
+                fetchMyVenues(); 
+            }
             checkAuth();
         }
 
-        // --- AUTH LOGIC ---
-        async function handleLogin() {
-            const r = await fetch(`${API}/login/`, {
-                method: 'POST', headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ username: document.getElementById('l-user').value, password: document.getElementById('l-pass').value })
-            });
-            const data = await r.json();
-            if (r.ok) {
-                localStorage.setItem('token', data.token);
-                localStorage.setItem('user', data.username);
-                checkAuth(); showSection('browse'); toast('Witaj ponownie!', 'success');
-            } else { toast('Błędne dane logowania', 'error'); }
-        }
-
-        async function handleRegister() {
-            const user = document.getElementById('r-user').value;
-            const email = document.getElementById('r-email').value;
-            const pass = document.getElementById('r-pass').value;
-
-            if(!user || !email || !pass) { toast('Wypełnij wszystkie pola!', 'error'); return; }
-
-            try {
-                const r = await fetch(`${API}/register/`, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ username: user, email: email, password: pass })
-                });
-                const data = await r.json();
-                if (r.ok) {
-                    localStorage.setItem('token', data.token);
-                    localStorage.setItem('user', data.username);
-                    checkAuth(); showSection('browse'); toast('Konto utworzone!', 'success');
-                } else { toast(data.error || 'Błąd rejestracji', 'error'); }
-            } catch(e) { toast('Błąd połączenia', 'error'); }
-        }
-
-        function handleLogout() { localStorage.clear(); checkAuth(); showSection('browse'); toast('Wylogowano'); }
-
-        function checkAuth() {
-            const t = localStorage.getItem('token'), u = localStorage.getItem('user');
-            const isLogged = !!t;
-            document.getElementById('nav-user').textContent = isLogged ? u : 'Moje konto';
-            if(document.getElementById('section-account').classList.contains('hidden')) return;
-            
-            document.getElementById('login-form').classList.toggle('hidden', isLogged);
-            document.getElementById('register-form').classList.add('hidden');
-            document.getElementById('user-profile').classList.toggle('hidden', !isLogged);
-            if(isLogged) document.getElementById('display-user').textContent = u;
-        }
-
-        // --- DATA FETCHING ---
         async function fetchVenues() {
             try {
                 const r = await fetch(`${API}/venues/`);
                 const raw = await r.json();
                 const seen = new Set();
-                allVenues = raw.filter(v => { if (seen.has(v.venue_id)) return false; seen.add(v.venue_id); return true; });
+                allVenues = raw.filter(v => { 
+                    const id = v.venue_id || v.id; 
+                    if (seen.has(id)) return false; 
+                    seen.add(id); 
+                    return true; 
+                });
                 renderVenues(allVenues);
                 document.getElementById('stat-venues').textContent = allVenues.length;
                 const cities = new Set(allVenues.map(v => v.city_name).filter(Boolean));
@@ -312,10 +313,11 @@
         function renderVenues(venues) {
             const grid = document.getElementById('venues-grid');
             document.getElementById('venues-count').textContent = venues.length + ' wyników';
+            
             grid.innerHTML = venues.map(v => `
-                <div class="venue-card group p-2" onclick='openModal(${JSON.stringify(v).replace(/'/g,"&apos;")})'>
+                <div class="venue-card group p-2 cursor-pointer" onclick="openModalById(${v.venue_id || v.id})">
                     <div class="card-image-wrap">
-                        ${v.photo_url ? `<img src="${v.photo_url}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">` : `<div class="w-full h-full flex items-center justify-center text-5xl">🏢</div>`}
+                        ${v.photo_url ? `<img src="${v.photo_url}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">` : `<div class="w-full h-full flex items-center justify-center text-5xl bg-slate-100">🏢</div>`}
                         <div class="absolute top-4 left-4 bg-white/95 backdrop-blur px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest text-slate-800 shadow-sm">${v.category_name || 'Lokal'}</div>
                     </div>
                     <div class="p-6 pt-2">
@@ -323,7 +325,10 @@
                         <h3 class="text-xl font-black text-slate-900 tracking-tight mb-2">${v.name}</h3>
                         <p class="text-slate-400 text-sm line-clamp-2 mb-6 font-medium leading-relaxed">${v.description || ''}</p>
                         <div class="flex items-center justify-between pt-4 border-t border-slate-50">
-                            <span class="text-[11px] font-black text-slate-400 flex items-center gap-2">do ${v.capacity || 0} osób</span>
+                            <span class="text-[11px] font-black text-slate-400 flex items-center gap-2">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                                DO ${v.capacity || 0} OSÓB
+                            </span>
                             <div class="text-right">
                                 <span class="text-lg font-black text-slate-900">${Math.round(v.price_per_day)} zł</span>
                                 <span class="text-[9px] font-bold text-slate-400 block -mt-1 uppercase">/ doba</span>
@@ -334,56 +339,253 @@
             `).join('');
         }
 
-        function filterVenues() {
-            const q = document.getElementById('search-input').value.toLowerCase();
-            const filtered = allVenues.filter(v => (v.name || '').toLowerCase().includes(q) || (v.city_name || '').toLowerCase().includes(q));
-            renderVenues(filtered);
-        }
+        function openModalById(id) {
+            const v = allVenues.find(venue => (venue.venue_id || venue.id) === id);
+            if (!v) return;
 
-        // --- MODAL & BOOKING ---
-        function openModal(v) {
-            currentVenue = v.venue_id;
+            currentVenue = v.venue_id || v.id;
             const thumb = document.getElementById('modal-thumb');
             thumb.innerHTML = v.photo_url ? `<img src="${v.photo_url}" class="w-full h-full object-cover">` : `<div class="w-full h-full flex items-center justify-center text-6xl">🏢</div>`;
+            
             document.getElementById('modal-title').textContent = v.name;
             document.getElementById('modal-city').textContent = v.city_name || 'Polska';
-            document.getElementById('modal-price').dataset.price = v.price_per_day || 0;
+            
+            document.getElementById('booking-modal').dataset.price = v.price_per_day || 0;
+            
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('start').min = today;
+            document.getElementById('end').min = today;
+            
+            document.getElementById('start').value = '';
+            document.getElementById('end').value = '';
+            document.getElementById('total-row').classList.add('hidden');
+            
             document.getElementById('booking-modal').classList.remove('hidden');
         }
 
         function closeModal() { document.getElementById('booking-modal').classList.add('hidden'); }
 
         function calcTotal() {
-            const s = document.getElementById('start').value, e = document.getElementById('end').value;
-            const p = parseFloat(document.getElementById('modal-price').dataset.price);
-            if (s && e && s < e) {
-                const days = Math.round((new Date(e) - new Date(s)) / 86400000);
-                document.getElementById('total-val').textContent = Math.round(days * p * 1.1) + ' zł';
+            const s = document.getElementById('start').value;
+            const e = document.getElementById('end').value;
+            const p = parseFloat(document.getElementById('booking-modal').dataset.price); 
+            
+            if (s && e && s <= e) {
+                const start = new Date(s);
+                const end = new Date(e);
+                const days = Math.floor((end - start) / 86400000) + 1;
+                const rawTotal = days * p * 1.1;
+                const finalTotal = Math.round(rawTotal);
+
+                document.getElementById('total-val').textContent = finalTotal + ' zł';
                 document.getElementById('total-row').classList.remove('hidden');
-            } else { document.getElementById('total-row').classList.add('hidden'); }
+            } else { 
+                document.getElementById('total-row').classList.add('hidden'); 
+            }
         }
 
-        async function submitBooking() {
-            const s = document.getElementById('start').value, e = document.getElementById('end').value;
-            const r = await fetch(`${API}/bookings/`, {
-                method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Token ${localStorage.getItem('token')}` },
-                body: JSON.stringify({ venue: currentVenue, start_date: s + 'T12:00:00Z', end_date: e + 'T12:00:00Z' })
-            });
-            if (r.ok) { closeModal(); toast('Zarezerwowano!', 'success'); fetchBookings(); } 
-            else { toast('Zaloguj się, aby rezerwować', 'error'); }
+        function filterVenues() {
+            const q = document.getElementById('search-input').value.toLowerCase();
+            const filtered = allVenues.filter(v => 
+                (v.name || '').toLowerCase().includes(q) || 
+                (v.city_name || '').toLowerCase().includes(q)
+            );
+            renderVenues(filtered);
         }
+
+        async function handleLogin() {
+            const r = await fetch(`${API}/login/`, {
+                method: 'POST', headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ username: document.getElementById('l-user').value, password: document.getElementById('l-pass').value })
+            });
+            const data = await r.json();
+            if (r.ok) { localStorage.setItem('token', data.token); localStorage.setItem('user', data.username); checkAuth(); showSection('browse'); toast('Zalogowano!', 'success'); }
+            else { toast('Błąd logowania', 'error'); }
+        }
+
+        async function handleRegister() {
+            const user = document.getElementById('r-user').value;
+            const email = document.getElementById('r-email').value;
+            const pass = document.getElementById('r-pass').value;
+
+            if (!user || !email || !pass) {
+                toast('Wypełnij wszystkie pola!', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API}/register/`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: user, email: email, password: pass })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('user', data.username);
+                    checkAuth();
+                    showSection('browse');
+                    toast('Konto utworzone pomyślnie!', 'success');
+                } else {
+                    toast(data.error || 'Błąd rejestracji', 'error');
+                }
+            } catch (error) {
+                console.error("Błąd sieci:", error);
+                toast('Błąd połączenia z serwerem', 'error');
+            }
+        }
+
+        function checkAuth() {
+            const t = localStorage.getItem('token'), u = localStorage.getItem('user');
+            if (t) {
+                document.getElementById('login-form').classList.add('hidden');
+                document.getElementById('register-form').classList.add('hidden');
+                document.getElementById('user-profile').classList.remove('hidden');
+                document.getElementById('display-user').textContent = u;
+                document.getElementById('nav-user').textContent = u;
+            } else {
+                if (!document.getElementById('section-account').classList.contains('hidden')) {
+                    document.getElementById('login-form').classList.remove('hidden');
+                    document.getElementById('register-form').classList.add('hidden');
+                    document.getElementById('user-profile').classList.add('hidden');
+                }
+                document.getElementById('nav-user').textContent = 'Moje konto';
+            }
+        }
+
+        function handleLogout() { localStorage.clear(); checkAuth(); showSection('browse'); toast('Wylogowano'); }
 
         async function fetchBookings() {
+            const list = document.getElementById('bookings-list');
+            const token = localStorage.getItem('token');
+            if (!token) return;
+
             try {
-                const r = await fetch(`${API}/bookings/`, { headers: { 'Authorization': `Token ${localStorage.getItem('token')}` } });
+                const r = await fetch(`${API}/bookings/`, { 
+                    headers: { 'Authorization': `Token ${token}` } 
+                });
                 const data = await r.json();
-                document.getElementById('bookings-list').innerHTML = data.map(b => `
-                    <div class="flex justify-between items-center p-6 bg-slate-50 rounded-[24px] border border-slate-100">
-                        <div><p class="font-black text-slate-900">${b.venue_name || 'Lokal'}</p><p class="text-[10px] font-bold text-slate-400 mt-1 uppercase">${b.start_date.split('T')[0]} — ${b.end_date.split('T')[0]}</p></div>
-                        <div class="text-right"><p class="font-black text-slate-900">${Math.round(b.total_cost)} zł</p><span class="text-[9px] font-black uppercase px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-600">Potwierdzona</span></div>
+                
+                if (data.length === 0) {
+                    list.innerHTML = `<div class="text-center py-12 text-slate-400 font-medium">Brak aktywnych rezerwacji.</div>`;
+                    return;
+                }
+
+                list.innerHTML = data.map(b => {
+                    const bId = b.booking_id || b.id;
+                    const canAct = (b.status !== 'OPŁACONO' && b.status !== 'ANULOWANO');
+                    
+                    return `
+                    <div class="p-5 bg-slate-50 rounded-[28px] border border-slate-100 space-y-4 text-slate-900 ${b.status === 'ANULOWANO' ? 'opacity-60' : ''}">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="font-black text-lg">${b.venue_name || 'Lokal'}</p>
+                                <div class="flex items-center gap-2 mt-1">
+                                    <span class="text-[9px] font-black uppercase px-2 py-0.5 rounded-md ${b.status === 'OPŁACONO' ? 'bg-emerald-100 text-emerald-600' : b.status === 'ANULOWANO' ? 'bg-rose-100 text-rose-600' : 'bg-amber-100 text-amber-600'}">
+                                        ${b.status || 'Aktywna'}
+                                    </span>
+                                    <p class="text-[11px] font-bold text-slate-400">${b.start_date.split('T')[0]} — ${b.end_date.split('T')[0]}</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-black text-xl">${Math.round(b.total_cost)} zł</p>
+                            </div>
+                        </div>
+                        
+                        ${canAct ? `
+                        <div class="flex gap-3 pt-2">
+                            <button onclick="payBooking(${bId})" class="flex-1 btn-pay text-white py-3 rounded-xl font-bold text-xs uppercase tracking-wider shadow-lg shadow-emerald-100 transition-all">
+                                Opłać rezerwację
+                            </button>
+                            <button onclick="cancelBooking(${bId})" class="btn-delete px-4 py-3 rounded-xl font-bold text-xs uppercase transition-colors">
+                                Anuluj rezerwację
+                            </button>
+                        </div>
+                        ` : ''}
+                    </div>
+                `}).join('');
+            } catch(e) { 
+                console.error("Błąd pobierania rezerwacji:", e); 
+            }
+        }
+
+        async function cancelBooking(id) {
+            const t = localStorage.getItem('token');
+            try {
+                const r = await fetch(`${API}/bookings/${id}/`, {
+                    method: 'PATCH',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': `Token ${t}` 
+                    },
+                    body: JSON.stringify({ status: 'ANULOWANO' })
+                });
+
+                if (r.ok) {
+                    toast('Rezerwacja anulowana', 'success');
+                    fetchBookings();
+                } else {
+                    toast('Błąd podczas anulowania', 'error');
+                }
+            } catch(e) { console.error("Błąd sieci:", e); }
+        }
+
+        async function payBooking(id) {
+            const t = localStorage.getItem('token');
+            try {
+                const r = await fetch(`${API}/bookings/${id}/`, {
+                    method: 'PATCH',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': `Token ${t}` 
+                    },
+                    body: JSON.stringify({ status: 'OPŁACONO' })
+                });
+
+                if (r.ok) {
+                    toast('Opłacono pomyślnie!', 'success');
+                    fetchBookings();
+                } else {
+                    toast('Błąd podczas płatności', 'error');
+                }
+            } catch(e) { console.error("Błąd sieci:", e); }
+        }
+                
+
+        async function fetchMyVenues() {
+            const list = document.getElementById('my-venues-list');
+            const token = localStorage.getItem('token');
+            const currentUser = localStorage.getItem('user');
+            if (!token) return;
+
+            try {
+                const r = await fetch(`${API}/venues/`, { headers: { 'Authorization': `Token ${token}` } });
+                const data = await r.json();
+                
+                const myVenues = data.filter(v => v.owner_username === currentUser);
+                
+                if (myVenues.length === 0) {
+                    list.innerHTML = `<div class="text-center py-12 text-slate-400 font-medium">Nie masz jeszcze żadnych ofert.</div>`;
+                    return;
+                }
+
+                list.innerHTML = myVenues.map(v => `
+                    <div class="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                        <div class="flex items-center gap-4 text-slate-900">
+                            <div class="w-12 h-12 rounded-xl overflow-hidden bg-slate-200 shrink-0">
+                                ${v.photo_url ? `<img src="${v.photo_url}" class="w-full h-full object-cover">` : '<div class="w-full h-full flex items-center justify-center text-xl">🏢</div>'}
+                            </div>
+                            <div>
+                                <p class="font-black">${v.name}</p>
+                                <p class="text-[10px] font-bold text-rose-500 uppercase tracking-wider">${v.city_name}</p>
+                            </div>
+                        </div>
+                        <p class="font-black text-slate-900">${Math.round(v.price_per_day)} <span class="text-[9px] text-slate-400 uppercase">/ doba</span></p>
                     </div>
                 `).join('');
-            } catch(e) {}
+            } catch(e) { console.error(e); }
         }
 
         async function submitVenue() {
@@ -394,10 +596,48 @@
             const img = document.getElementById('v-image');
             if (img.files[0]) formData.append('photo', img.files[0]);
             const r = await fetch(`${API}/venues/`, { method: 'POST', headers: { 'Authorization': `Token ${localStorage.getItem('token')}` }, body: formData });
-            if (r.ok) { toast('Dodano lokal!', 'success'); fetchVenues(); showSection('browse'); } else { toast('Błąd dodawania', 'error'); }
+            if (r.ok) { toast('Dodano lokal!', 'success'); fetchVenues(); showSection('browse'); } else { toast('Błąd', 'error'); }
         }
 
-        // INIT
+        async function submitBooking() {
+            const s = document.getElementById('start').value, e = document.getElementById('end').value;
+            
+            if (!s || !e) {
+                toast('Wybierz daty!', 'error');
+                return;
+            }
+            
+            const token = localStorage.getItem('token');
+            if (!token) {
+                toast('Zaloguj się, aby rezerwować.', 'error');
+                showSection('account');
+                closeModal();
+                return;
+            }
+
+            const r = await fetch(`${API}/bookings/`, {
+                method: 'POST', 
+                headers: { 
+                    'Content-Type': 'application/json', 
+                    'Authorization': `Token ${token}` 
+                },
+                body: JSON.stringify({ 
+                    venue: currentVenue, 
+                    start_date: s + 'T12:00:00Z', 
+                    end_date: e + 'T12:00:00Z' 
+                })
+            });
+
+            if (r.ok) { 
+                closeModal(); 
+                toast('Zarezerwowano pomyślnie!', 'success'); 
+                fetchBookings(); 
+            } else { 
+                const errorData = await r.json();
+                toast(errorData.error || 'Błąd rezerwacji', 'error'); 
+            }
+        }
+
         fetchVenues(); checkAuth();
     </script>
 </body>
