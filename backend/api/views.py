@@ -2,6 +2,8 @@ import os
 from decimal import Decimal, InvalidOperation, ROUND_HALF_UP
 from collections import defaultdict
 
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.db import transaction
@@ -261,6 +263,15 @@ def register_view(request):
 
     if not username or not email or not password:
         return error_response('Wypełnij login, e-mail i hasło.', status.HTTP_400_BAD_REQUEST)
+    
+    try:
+        validate_email(email)
+    except ValidationError:
+        return error_response(
+            'Podaj poprawny adres e-mail, np. nazwa@example.com.',
+            status.HTTP_400_BAD_REQUEST,
+            field='email'
+        )
 
     if role not in PUBLIC_ROLES:
         return error_response('Wybierz poprawny typ konta: najemca albo właściciel.', field='role')
