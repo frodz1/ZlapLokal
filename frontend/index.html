@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,65 +10,226 @@
     <title>ZłapLokal.pl — Znajdź swoją przestrzeń</title>
     <!-- ZLAPLOKAL_BUILD: 2026-05-23-owner-paid-pending-admin-tabs -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
     <style>
-        :root { --brand:#f43f5e; --brand-dark:#e11d48; --bg:#f8fafc; --card-bg:#fff; --text-main:#0f172a; }
-        body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text-main); -webkit-font-smoothing:antialiased; }
-        .nav-glass { background:rgba(255,255,255,.88); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border-bottom:1px solid rgba(0,0,0,.05); }
-        .hero-gradient { background:radial-gradient(circle at top right,#1e293b,#0f172a); }
-        .venue-card { background:var(--card-bg); border-radius:28px; transition:all .35s cubic-bezier(.4,0,.2,1); border:1px solid rgba(0,0,0,.04); }
-        .venue-card:hover { transform:translateY(-8px); box-shadow:0 25px 50px -12px rgba(0,0,0,.08); border-color:rgba(0,0,0,.08); }
-        .card-image-wrap { position:relative; height:230px; border-radius:24px; margin:10px; overflow:hidden; background:#f1f5f9; }
-        .btn-fancy { background:var(--brand); transition:all .25s ease; box-shadow:0 4px 12px rgba(244,63,94,.2); }
-        .btn-fancy:hover { background:var(--brand-dark); transform:translateY(-1px); box-shadow:0 8px 20px rgba(244,63,94,.3); }
-        .btn-pay { background:#10b981; transition:all .25s ease; }
-        .btn-pay:hover { background:#059669; transform:translateY(-1px); }
-        .btn-delete { color:#94a3b8; transition:all .2s ease; }
-        .btn-delete:hover { color:#f43f5e; }
-        .search-pill { background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.12); backdrop-filter:blur(10px); }
-        .line-clamp-2 { display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
-        .hidden { display:none !important; }
-        .stars { letter-spacing:.05em; color:#f59e0b; text-shadow:0 1px 0 rgba(0,0,0,.03); }
-        .calendar-grid { display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); gap:.55rem; }
-        .calendar-day { min-height:62px; border-radius:18px; display:flex; flex-direction:column; align-items:center; justify-content:center; font-weight:900; font-size:.95rem; border:1px solid transparent; transition:all .15s ease; }
-        .calendar-day.free { background:#dcfce7; color:#166534; cursor:pointer; border-color:#bbf7d0; }
-        .calendar-day.free:hover { transform:translateY(-2px); box-shadow:0 10px 18px rgba(22,101,52,.12); }
-        .calendar-day.booked { background:#fee2e2; color:#991b1b; cursor:not-allowed; border-color:#fecaca; }
-        .calendar-day.unavailable { background:#f1f5f9; color:#94a3b8; cursor:not-allowed; }
-        .calendar-day.selected { outline:3px solid #f43f5e; outline-offset:2px; background:#ffe4e6; color:#be123c; }
-        .calendar-day.in-range { background:#fff1f2; color:#be123c; border-color:#fecdd3; }
-        select { background-image:none; }
+        :root {
+            --brand: #f43f5e;
+            --brand-dark: #e11d48;
+            --bg: #f8fafc;
+            --card-bg: #fff;
+            --text-main: #0f172a;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text-main);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .nav-glass {
+            background: rgba(255, 255, 255, .88);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0, 0, 0, .05);
+        }
+
+        .hero-gradient {
+            background: radial-gradient(circle at top right, #1e293b, #0f172a);
+        }
+
+        .venue-card {
+            background: var(--card-bg);
+            border-radius: 28px;
+            transition: all .35s cubic-bezier(.4, 0, .2, 1);
+            border: 1px solid rgba(0, 0, 0, .04);
+        }
+
+        .venue-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, .08);
+            border-color: rgba(0, 0, 0, .08);
+        }
+
+        .card-image-wrap {
+            position: relative;
+            height: 230px;
+            border-radius: 24px;
+            margin: 10px;
+            overflow: hidden;
+            background: #f1f5f9;
+        }
+
+        .btn-fancy {
+            background: var(--brand);
+            transition: all .25s ease;
+            box-shadow: 0 4px 12px rgba(244, 63, 94, .2);
+        }
+
+        .btn-fancy:hover {
+            background: var(--brand-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 8px 20px rgba(244, 63, 94, .3);
+        }
+
+        .btn-pay {
+            background: #10b981;
+            transition: all .25s ease;
+        }
+
+        .btn-pay:hover {
+            background: #059669;
+            transform: translateY(-1px);
+        }
+
+        .btn-delete {
+            color: #94a3b8;
+            transition: all .2s ease;
+        }
+
+        .btn-delete:hover {
+            color: #f43f5e;
+        }
+
+        .search-pill {
+            background: rgba(255, 255, 255, .05);
+            border: 1px solid rgba(255, 255, 255, .12);
+            backdrop-filter: blur(10px);
+        }
+
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .stars {
+            letter-spacing: .05em;
+            color: #f59e0b;
+            text-shadow: 0 1px 0 rgba(0, 0, 0, .03);
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, minmax(0, 1fr));
+            gap: .55rem;
+        }
+
+        .calendar-day {
+            min-height: 62px;
+            border-radius: 18px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: .95rem;
+            border: 1px solid transparent;
+            transition: all .15s ease;
+        }
+
+        .calendar-day.free {
+            background: #dcfce7;
+            color: #166534;
+            cursor: pointer;
+            border-color: #bbf7d0;
+        }
+
+        .calendar-day.free:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 18px rgba(22, 101, 52, .12);
+        }
+
+        .calendar-day.booked {
+            background: #fee2e2;
+            color: #991b1b;
+            cursor: not-allowed;
+            border-color: #fecaca;
+        }
+
+        .calendar-day.unavailable {
+            background: #f1f5f9;
+            color: #94a3b8;
+            cursor: not-allowed;
+        }
+
+        .calendar-day.selected {
+            outline: 3px solid #f43f5e;
+            outline-offset: 2px;
+            background: #ffe4e6;
+            color: #be123c;
+        }
+
+        .calendar-day.in-range {
+            background: #fff1f2;
+            color: #be123c;
+            border-color: #fecdd3;
+        }
+
+        select {
+            background-image: none;
+        }
     </style>
 </head>
+
 <body class="pb-20">
-    <div id="toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 z-[1000] px-8 py-4 rounded-2xl text-white font-bold shadow-2xl transition-all duration-300 translate-y-4 opacity-0 pointer-events-none text-center"></div>
+    <div id="toast"
+        class="fixed bottom-8 left-1/2 -translate-x-1/2 z-[1000] px-8 py-4 rounded-2xl text-white font-bold shadow-2xl transition-all duration-300 translate-y-4 opacity-0 pointer-events-none text-center">
+    </div>
 
     <nav class="nav-glass sticky top-0 z-50 min-h-16 flex items-center py-2">
         <div class="container mx-auto px-6 flex justify-between items-center">
             <div class="flex items-center gap-2 cursor-pointer group" onclick="showSection('browse')">
-                <div class="w-9 h-9 bg-rose-500 rounded-xl flex items-center justify-center text-white font-black text-lg group-hover:rotate-12 transition-transform">Z</div>
-                <span class="text-xl md:text-2xl font-black tracking-tighter text-slate-900">Złap<span class="text-rose-500">Lokal</span></span>
+                <div
+                    class="w-9 h-9 bg-rose-500 rounded-xl flex items-center justify-center text-white font-black text-lg group-hover:rotate-12 transition-transform">
+                    Z</div>
+                <span class="text-xl md:text-2xl font-black tracking-tighter text-slate-900">Złap<span
+                        class="text-rose-500">Lokal</span></span>
             </div>
             <div class="flex items-center gap-3 md:gap-6 text-sm font-bold text-slate-500">
-                <button onclick="showSection('browse')" class="hover:text-rose-500 transition-colors">Przeglądaj</button>
-                <button onclick="showSection('bookings')" class="hover:text-rose-500 transition-colors">Rezerwacje</button>
-                <button id="nav-admin" onclick="showSection('admin')" class="hidden hover:text-rose-500 transition-colors">Panel administracyjny</button>
-                <button id="nav-owner" onclick="showSection('owner')" class="hidden hover:text-rose-500 transition-colors">Panel właściciela</button>
-                <button onclick="showSection('account')" class="px-5 py-2.5 bg-slate-900 text-white rounded-2xl hover:bg-rose-500 transition-all shadow-lg text-xs md:text-sm" id="nav-user">Moje konto</button>
+                <button onclick="showSection('browse')"
+                    class="hover:text-rose-500 transition-colors">Przeglądaj</button>
+                <button onclick="showSection('bookings')"
+                    class="hover:text-rose-500 transition-colors">Rezerwacje</button>
+                <button id="nav-admin" onclick="showSection('admin')"
+                    class="hidden hover:text-rose-500 transition-colors">Panel administracyjny</button>
+                <button id="nav-owner" onclick="showSection('owner')"
+                    class="hidden hover:text-rose-500 transition-colors">Panel właściciela</button>
+                <button onclick="showSection('account')"
+                    class="px-5 py-2.5 bg-slate-900 text-white rounded-2xl hover:bg-rose-500 transition-all shadow-lg text-xs md:text-sm"
+                    id="nav-user">Moje konto</button>
             </div>
         </div>
     </nav>
 
     <header id="hero-section" class="hero-gradient pt-24 pb-32 px-6 text-center">
         <div class="max-w-4xl mx-auto">
-            <h1 class="text-5xl md:text-7xl font-black text-white mb-10 tracking-tight leading-[1.1]">Znajdź <span class="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 to-orange-400">idealny</span> lokal w Twojej okolicy.</h1>
+            <h1 class="text-5xl md:text-7xl font-black text-white mb-10 tracking-tight leading-[1.1]">Znajdź <span
+                    class="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 to-orange-400">idealny</span>
+                lokal w Twojej okolicy.</h1>
             <div class="max-w-2xl mx-auto search-pill p-2 rounded-3xl flex items-center gap-2">
-                <input type="text" id="search-input" oninput="filterVenues()" placeholder="Wpisz miasto, województwo lub nazwę lokalu..." class="bg-transparent border-none focus:ring-0 text-white placeholder-slate-400 flex-1 px-6 text-lg outline-none">
-                <button onclick="filterVenues()" class="btn-fancy text-white px-8 py-4 rounded-2xl font-bold">Szukaj</button>
+                <input type="text" id="search-input" oninput="filterVenues()"
+                    placeholder="Wpisz miasto, województwo lub nazwę lokalu..."
+                    class="bg-transparent border-none focus:ring-0 text-white placeholder-slate-400 flex-1 px-6 text-lg outline-none">
+                <button onclick="filterVenues()"
+                    class="btn-fancy text-white px-8 py-4 rounded-2xl font-bold">Szukaj</button>
             </div>
             <div class="flex justify-center gap-16 mt-20">
-                <div class="text-center"><p class="text-4xl font-black text-white" id="stat-venues">0</p><p class="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mt-2">Dostępnych lokali</p></div>
-                <div class="text-center"><p class="text-4xl font-black text-white" id="stat-cities">0</p><p class="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mt-2">Lokalizacje</p></div>
+                <div class="text-center">
+                    <p class="text-4xl font-black text-white" id="stat-venues">0</p>
+                    <p class="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mt-2">Dostępnych lokali
+                    </p>
+                </div>
+                <div class="text-center">
+                    <p class="text-4xl font-black text-white" id="stat-cities">0</p>
+                    <p class="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mt-2">Lokalizacje</p>
+                </div>
             </div>
         </div>
     </header>
@@ -75,20 +237,38 @@
     <main class="container mx-auto px-6 -mt-12 relative z-10">
         <section id="section-browse" class="section-content">
             <div class="flex items-center justify-end mb-8">
-                <div class="bg-white/80 backdrop-blur px-5 py-2.5 rounded-2xl shadow-sm border border-slate-100 font-black text-slate-500 text-[10px] uppercase tracking-widest" id="venues-count">0 wyników</div>
+                <div class="bg-white/80 backdrop-blur px-5 py-2.5 rounded-2xl shadow-sm border border-slate-100 font-black text-slate-500 text-[10px] uppercase tracking-widest"
+                    id="venues-count">0 wyników</div>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="venues-grid"></div>
         </section>
 
         <section id="section-bookings" class="section-content hidden pt-10">
-            <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-8">
-                <div class="bg-white rounded-[40px] p-8 md:p-10 shadow-xl border border-slate-50">
-                    <div class="flex items-center gap-3 mb-8"><div class="w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center text-xl">🛒</div><h2 id="bookings-panel-title" class="text-2xl font-black tracking-tight text-slate-900">Twoje rezerwacje</h2></div>
-                    <div id="bookings-list" class="space-y-4 text-slate-900"><div class="text-center py-12 text-slate-400 font-medium">Brak aktywnych rezerwacji.</div></div>
+            <div id="bookings-layout" class="max-w-6xl mx-auto grid md:grid-cols-2 gap-8">
+                <div id="bookings-card" class="bg-white rounded-[40px] p-8 md:p-10 shadow-xl border border-slate-50">
+                    <div class="flex items-center gap-3 mb-8">
+                        <div class="w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center text-xl">🛒
+                        </div>
+                        <h2 id="bookings-panel-title" class="text-2xl font-black tracking-tight text-slate-900">Twoje
+                            rezerwacje</h2>
+                    </div>
+                    <div id="bookings-list" class="space-y-4 text-slate-900">
+                        <div class="text-center py-12 text-slate-400 font-medium">Brak aktywnych rezerwacji.</div>
+                    </div>
                 </div>
-                <div class="bg-white rounded-[40px] p-8 md:p-10 shadow-xl border border-slate-50">
-                    <div class="flex items-center gap-3 mb-8"><div class="w-12 h-12 bg-rose-100 rounded-2xl flex items-center justify-center text-xl text-rose-500">🏠</div><h2 id="venues-panel-title" class="text-2xl font-black tracking-tight text-slate-900">Twoje lokale</h2></div>
-                    <div id="my-venues-list" class="space-y-4"><div class="text-center py-12 text-slate-400 font-medium">Nie wystawiłeś jeszcze żadnego lokalu.</div></div>
+                <div id="bookings-venues-card"
+                    class="bg-white rounded-[40px] p-8 md:p-10 shadow-xl border border-slate-50">
+                    <div class="flex items-center gap-3 mb-8">
+                        <div
+                            class="w-12 h-12 bg-rose-100 rounded-2xl flex items-center justify-center text-xl text-rose-500">
+                            🏠</div>
+                        <h2 id="venues-panel-title" class="text-2xl font-black tracking-tight text-slate-900">Twoje
+                            lokale</h2>
+                    </div>
+                    <div id="my-venues-list" class="space-y-4">
+                        <div class="text-center py-12 text-slate-400 font-medium">Nie wystawiłeś jeszcze żadnego lokalu.
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -98,90 +278,167 @@
                 <h2 class="text-3xl font-black mb-2 tracking-tight text-slate-900">Witaj ponownie</h2>
                 <p class="text-slate-400 mb-8 font-medium">Zaloguj się, aby zarządzać lokalami</p>
                 <div class="space-y-4">
-                    <input type="text" id="l-user" placeholder="Login" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500 transition-all text-slate-900">
-                    <input type="password" id="l-pass" placeholder="Hasło" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500 transition-all text-slate-900">
-                    <button onclick="handleLogin()" class="w-full btn-fancy text-white py-4 rounded-2xl font-black mt-4 uppercase tracking-wider text-sm">Zaloguj się</button>
-                    <p class="text-center text-xs font-bold text-slate-400 mt-6 cursor-pointer" onclick="toggleAuth('reg')">Nie masz konta? <span class="text-rose-500">Zarejestruj się</span></p>
+                    <input type="text" id="l-user" placeholder="Login"
+                        class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500 transition-all text-slate-900">
+                    <input type="password" id="l-pass" placeholder="Hasło"
+                        class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500 transition-all text-slate-900">
+                    <button onclick="handleLogin()"
+                        class="w-full btn-fancy text-white py-4 rounded-2xl font-black mt-4 uppercase tracking-wider text-sm">Zaloguj
+                        się</button>
+                    <p class="text-center text-xs font-bold text-slate-400 mt-6 cursor-pointer"
+                        onclick="toggleAuth('reg')">Nie masz konta? <span class="text-rose-500">Zarejestruj się</span>
+                    </p>
                 </div>
             </div>
 
-            <div id="register-form" class="max-w-xl mx-auto bg-white rounded-[40px] p-10 shadow-2xl hidden text-slate-900">
+            <div id="register-form"
+                class="max-w-xl mx-auto bg-white rounded-[40px] p-10 shadow-2xl hidden text-slate-900">
                 <h2 class="text-3xl font-black mb-2 tracking-tight">Dołącz do nas</h2>
                 <p class="text-slate-400 mb-8 font-medium">Stwórz darmowe konto i wybierz typ użytkownika</p>
                 <div class="grid grid-cols-2 gap-4">
-                    <input type="text" id="r-user" placeholder="Login" class="col-span-2 w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500 transition-all text-slate-900">
-                    <input type="email" id="r-email" placeholder="Email" class="col-span-2 w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500 transition-all text-slate-900">
-                    <input type="password" id="r-pass" placeholder="Hasło" class="col-span-2 w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500 transition-all text-slate-900">
-                    <select id="r-role" class="col-span-2 w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500 text-slate-600">
+                    <input type="text" id="r-user" placeholder="Login"
+                        class="col-span-2 w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500 transition-all text-slate-900">
+                    <input type="email" id="r-email" placeholder="Email"
+                        class="col-span-2 w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500 transition-all text-slate-900">
+                    <input type="password" id="r-pass" placeholder="Hasło"
+                        class="col-span-2 w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500 transition-all text-slate-900">
+                    <select id="r-role"
+                        class="col-span-2 w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500 text-slate-600">
                         <option value="Role_Renter">Zakładam konto jako najemca</option>
                         <option value="Role_Owner">Zakładam konto jako właściciel lokalu</option>
                     </select>
-                    <select id="r-province" onchange="loadCitiesIntoSelect('r-city', this.value)" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500 text-slate-600"><option value="">Województwo...</option></select>
-                    <select id="r-city" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500 text-slate-600"><option value="">Miasto...</option></select>
-                    <button onclick="handleRegister()" class="col-span-2 w-full btn-fancy text-white py-4 rounded-2xl font-black mt-4 uppercase tracking-widest text-sm">Zarejestruj się</button>
-                    <p class="col-span-2 text-center text-xs font-bold text-slate-400 mt-2 cursor-pointer" onclick="toggleAuth('login')">Masz już konto? <span class="text-rose-500">Zaloguj się</span></p>
+                    <select id="r-province" onchange="loadCitiesIntoSelect('r-city', this.value)"
+                        class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500 text-slate-600">
+                        <option value="">Województwo...</option>
+                    </select>
+                    <select id="r-city"
+                        class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500 text-slate-600">
+                        <option value="">Miasto...</option>
+                    </select>
+                    <button onclick="handleRegister()"
+                        class="col-span-2 w-full btn-fancy text-white py-4 rounded-2xl font-black mt-4 uppercase tracking-widest text-sm">Zarejestruj
+                        się</button>
+                    <p class="col-span-2 text-center text-xs font-bold text-slate-400 mt-2 cursor-pointer"
+                        onclick="toggleAuth('login')">Masz już konto? <span class="text-rose-500">Zaloguj się</span></p>
                 </div>
             </div>
 
             <div id="user-profile" class="max-w-6xl mx-auto grid md:grid-cols-3 gap-8 hidden pt-10 text-slate-900">
-                <div class="md:col-span-1 bg-white rounded-[40px] p-8 shadow-xl border border-slate-50 text-center h-fit">
-                    <div class="w-20 h-20 bg-rose-50 rounded-3xl mx-auto flex items-center justify-center text-rose-500 text-3xl mb-4 font-black">👤</div>
+                <div
+                    class="md:col-span-1 bg-white rounded-[40px] p-8 shadow-xl border border-slate-50 text-center h-fit">
+                    <div
+                        class="w-20 h-20 bg-rose-50 rounded-3xl mx-auto flex items-center justify-center text-rose-500 text-3xl mb-4 font-black">
+                        👤</div>
                     <h3 class="text-xl font-black mb-1" id="display-user">Użytkownik</h3>
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-8" id="display-role">Konto aktywne</p>
-                    <button onclick="showSection('bookings')" class="w-full py-4 bg-rose-500 text-white rounded-2xl font-bold hover:bg-rose-600 transition-all text-sm mb-3">Zarządzaj rezerwacjami</button>
-                    <button id="profile-admin-btn" onclick="showSection('admin')" class="hidden w-full py-4 bg-slate-900 text-white rounded-2xl font-bold hover:bg-slate-700 transition-all text-sm mb-3">Panel administracyjny</button>
-                    <button id="profile-owner-btn" onclick="showSection('owner')" class="hidden w-full py-4 bg-slate-900 text-white rounded-2xl font-bold hover:bg-slate-700 transition-all text-sm mb-3">Panel zarządzania</button>
-                    <button onclick="handleLogout()" class="w-full py-4 border-2 border-slate-100 rounded-2xl font-bold text-slate-500 hover:bg-slate-50 transition-all text-sm">Wyloguj się</button>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-8" id="display-role">
+                        Konto aktywne</p>
+                    <button onclick="showSection('bookings')"
+                        class="w-full py-4 bg-rose-500 text-white rounded-2xl font-bold hover:bg-rose-600 transition-all text-sm mb-3">Zarządzaj
+                        rezerwacjami</button>
+                    <button id="profile-admin-btn" onclick="showSection('admin')"
+                        class="hidden w-full py-4 bg-slate-900 text-white rounded-2xl font-bold hover:bg-slate-700 transition-all text-sm mb-3">Panel
+                        administracyjny</button>
+                    <button id="profile-owner-btn" onclick="showSection('owner')"
+                        class="hidden w-full py-4 bg-slate-900 text-white rounded-2xl font-bold hover:bg-slate-700 transition-all text-sm mb-3">Panel
+                        zarządzania</button>
+                    <button onclick="handleLogout()"
+                        class="w-full py-4 border-2 border-slate-100 rounded-2xl font-bold text-slate-500 hover:bg-slate-50 transition-all text-sm">Wyloguj
+                        się</button>
                 </div>
 
                 <div class="md:col-span-2 space-y-8">
                     <div class="bg-white rounded-[40px] p-10 shadow-xl border border-slate-50">
                         <h2 class="text-2xl font-black mb-2 tracking-tight text-slate-900">Ustawienia konta</h2>
-                        <p class="text-sm text-slate-400 mb-8 font-medium">Możesz być zwykłym klientem/najemcą albo właścicielem lokalu. Właściciel nadal może rezerwować lokale innych osób.</p>
-                        <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-4">Typ konta</label>
+                        <p class="text-sm text-slate-400 mb-8 font-medium">Możesz być zwykłym klientem/najemcą albo
+                            właścicielem lokalu. Właściciel nadal może rezerwować lokale innych osób.</p>
+                        <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-4">Typ
+                            konta</label>
                         <div class="grid md:grid-cols-[1fr_auto] gap-4 mt-3">
-                            <select id="account-role" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500 text-slate-600">
+                            <select id="account-role"
+                                class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500 text-slate-600">
                                 <option value="Role_Renter">Tylko klient / najemca</option>
                                 <option value="Role_Owner">Właściciel lokalu + najemca</option>
                             </select>
-                            <button onclick="updateMyRole()" class="btn-fancy text-white px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-xs">Zapisz rolę</button>
+                            <button onclick="updateMyRole()"
+                                class="btn-fancy text-white px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-xs">Zapisz
+                                rolę</button>
                         </div>
-                        <p id="account-role-help" class="text-xs text-slate-400 mt-4">Jako najemca widzisz tylko rezerwacje. Jako właściciel dostajesz też panel zarządzania i możliwość dodawania lokali.</p>
+                        <p id="account-role-help" class="text-xs text-slate-400 mt-4">Jako najemca widzisz tylko
+                            rezerwacje. Jako właściciel dostajesz też panel zarządzania i możliwość dodawania lokali.
+                        </p>
                     </div>
 
-                    <div id="renter-offer-info" class="hidden bg-white rounded-[40px] p-10 shadow-xl border border-slate-50">
-                        <h2 class="text-2xl font-black mb-2 tracking-tight text-slate-900">Chcesz wystawić swój lokal?</h2>
-                        <p class="text-sm text-slate-400 mb-6 font-medium">Zmień typ konta na „Właściciel lokalu + najemca”. Wtedy pojawi się panel zarządzania i formularz dodawania ofert.</p>
-                        <button onclick="document.getElementById('account-role').value='Role_Owner'; updateMyRole();" class="bg-slate-900 text-white px-6 py-4 rounded-2xl font-black text-sm">Zostań właścicielem</button>
+                    <div id="renter-offer-info"
+                        class="hidden bg-white rounded-[40px] p-10 shadow-xl border border-slate-50">
+                        <h2 class="text-2xl font-black mb-2 tracking-tight text-slate-900">Chcesz wystawić swój lokal?
+                        </h2>
+                        <p class="text-sm text-slate-400 mb-6 font-medium">Zmień typ konta na „Właściciel lokalu +
+                            najemca”. Wtedy pojawi się panel zarządzania i formularz dodawania ofert.</p>
+                        <button onclick="document.getElementById('account-role').value='Role_Owner'; updateMyRole();"
+                            class="bg-slate-900 text-white px-6 py-4 rounded-2xl font-black text-sm">Zostań
+                            właścicielem</button>
                     </div>
 
                     <div id="owner-offer-form" class="bg-white rounded-[40px] p-10 shadow-xl border border-slate-50">
                         <h2 class="text-2xl font-black mb-2 tracking-tight text-slate-900">Dodaj nową ofertę</h2>
-                        <p class="text-sm text-slate-400 mb-8 font-medium">Wypełnij też dokładny adres, powierzchnię, terminy dostępności, pojemność i kaucję — te dane są w tabeli bazy.</p>
+                        <p class="text-sm text-slate-400 mb-8 font-medium">Wypełnij też dokładny adres, powierzchnię,
+                            terminy dostępności, pojemność i kaucję — te dane są w tabeli bazy.</p>
                         <div class="grid grid-cols-2 gap-4">
-                            <input type="text" id="v-name" placeholder="Nazwa lokalu" class="col-span-2 w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500">
-                            <select id="v-province" onchange="loadCitiesIntoSelect('v-city', this.value)" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500 text-slate-600"><option value="">Województwo...</option></select>
-                            <select id="v-city" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500 text-slate-600"><option value="">Miasto...</option></select>
-                            <input type="text" id="v-street" placeholder="Dokładny adres, np. ul. Piękna 12" class="col-span-2 w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500">
-                            <input type="number" min="1" id="v-capacity" placeholder="Pojemność (liczba osób)" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500">
-                            <input type="number" min="1" step="0.01" id="v-area" placeholder="Powierzchnia (m²)" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500">
-                            <input type="number" min="0" step="0.01" id="v-price" placeholder="Cena bazowa za dobę (PLN)" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500">
-                            <input type="number" min="0" step="0.01" id="v-deposit" placeholder="Kaucja (PLN)" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500">
-                            <div><label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-4">Dostępny od</label><input type="date" id="v-available-from" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500"></div>
-                            <div><label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-4">Dostępny do</label><input type="date" id="v-available-to" class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500"></div>
-                            <input type="text" id="v-desc" placeholder="Krótki opis" class="col-span-2 w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500">
-                            <div class="col-span-2">
-                                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 ml-4">Zdjęcie główne</label>
-                                <input type="file" id="v-image" class="w-full p-4 bg-slate-50 rounded-2xl file:mr-4 file:py-2 file:px-6 file:rounded-xl file:border-0 file:text-xs file:font-black file:bg-rose-50 file:text-rose-600">
+                            <input type="text" id="v-name" placeholder="Nazwa lokalu"
+                                class="col-span-2 w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500">
+                            <select id="v-province" onchange="loadCitiesIntoSelect('v-city', this.value)"
+                                class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500 text-slate-600">
+                                <option value="">Województwo...</option>
+                            </select>
+                            <select id="v-city"
+                                class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500 text-slate-600">
+                                <option value="">Miasto...</option>
+                            </select>
+                            <input type="text" id="v-street" placeholder="Dokładny adres, np. ul. Piękna 12"
+                                class="col-span-2 w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500">
+                            <input type="number" min="1" id="v-capacity" placeholder="Pojemność (liczba osób)"
+                                class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500">
+                            <input type="number" min="1" step="0.01" id="v-area" placeholder="Powierzchnia (m²)"
+                                class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500">
+                            <input type="number" min="0" step="0.01" id="v-price"
+                                placeholder="Cena bazowa za dobę (PLN)"
+                                class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500">
+                            <input type="number" min="0" step="0.01" id="v-deposit" placeholder="Kaucja (PLN)"
+                                class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500">
+                            <div><label
+                                    class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-4">Dostępny
+                                    od</label><input type="date" id="v-available-from"
+                                    class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500">
                             </div>
-                            <button onclick="submitVenue()" class="col-span-2 btn-fancy text-white py-4 rounded-2xl font-black mt-4 uppercase tracking-widest text-sm">Opublikuj ofertę</button>
+                            <div><label
+                                    class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-4">Dostępny
+                                    do</label><input type="date" id="v-available-to"
+                                    class="w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500">
+                            </div>
+                            <input type="text" id="v-desc" placeholder="Krótki opis"
+                                class="col-span-2 w-full px-6 py-4 bg-slate-50 border-none rounded-2xl outline-none focus:ring-2 ring-rose-500">
+                            <div class="col-span-2">
+                                <label
+                                    class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 ml-4">Zdjęcie
+                                    główne</label>
+                                <input type="file" id="v-image"
+                                    class="w-full p-4 bg-slate-50 rounded-2xl file:mr-4 file:py-2 file:px-6 file:rounded-xl file:border-0 file:text-xs file:font-black file:bg-rose-50 file:text-rose-600">
+                            </div>
+                            <button onclick="submitVenue()"
+                                class="col-span-2 btn-fancy text-white py-4 rounded-2xl font-black mt-4 uppercase tracking-widest text-sm">Opublikuj
+                                ofertę</button>
                         </div>
                     </div>
 
-                    <div id="account-owner-venues-card" class="bg-white rounded-[40px] p-10 shadow-xl border border-slate-50">
+                    <div id="account-owner-venues-card"
+                        class="bg-white rounded-[40px] p-10 shadow-xl border border-slate-50">
                         <h2 class="text-2xl font-black mb-2 tracking-tight text-slate-900">Moje dodane oferty</h2>
-                        <p class="text-sm text-slate-400 mb-6 font-medium">Tutaj od razu pojawia się lokal po kliknięciu „Opublikuj ofertę”. Ta sama lista jest też w zakładce „Rezerwacje”.</p>
-                        <div id="account-my-venues-list" class="space-y-4"><div class="text-center py-8 text-slate-400 font-medium">Nie wystawiłeś jeszcze żadnego lokalu.</div></div>
+                        <p class="text-sm text-slate-400 mb-6 font-medium">Tutaj od razu pojawia się lokal po kliknięciu
+                            „Opublikuj ofertę”. Ta sama lista jest też w zakładce „Rezerwacje”.</p>
+                        <div id="account-my-venues-list" class="space-y-4">
+                            <div class="text-center py-8 text-slate-400 font-medium">Nie wystawiłeś jeszcze żadnego
+                                lokalu.</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -192,11 +449,17 @@
                 <div class="bg-white rounded-[40px] p-10 shadow-2xl border border-slate-50">
                     <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
                         <div>
-                            <p class="text-rose-500 text-[11px] font-black uppercase tracking-[0.25em] mb-3">Panel zarządzania właściciela</p>
-                            <h2 class="text-3xl md:text-4xl font-black tracking-tight text-slate-900">Twoje lokale, rezerwacje i wypłaty</h2>
-                            <p class="text-sm text-slate-400 mt-3 max-w-3xl">Ten panel jest dla właściciela, który ma jeden albo wiele lokali. Widzisz osobno kwotę zapłaconą przez klientów, prowizję platformy i kwotę, która zostaje dla Ciebie.</p>
+                            <p class="text-rose-500 text-[11px] font-black uppercase tracking-[0.25em] mb-3">Panel
+                                zarządzania właściciela</p>
+                            <h2 class="text-3xl md:text-4xl font-black tracking-tight text-slate-900">Twoje lokale,
+                                rezerwacje i wypłaty</h2>
+                            <p class="text-sm text-slate-400 mt-3 max-w-3xl">Ten panel jest dla właściciela, który ma
+                                jeden albo wiele lokali. Widzisz osobno kwotę zapłaconą przez klientów, prowizję
+                                platformy i kwotę, która zostaje dla Ciebie.</p>
                         </div>
-                        <button onclick="fetchOwnerDashboard()" class="bg-slate-900 text-white px-6 py-3 rounded-2xl font-black text-sm">Odśwież dane</button>
+                        <button onclick="fetchOwnerDashboard()"
+                            class="bg-slate-900 text-white px-6 py-3 rounded-2xl font-black text-sm">Odśwież
+                            dane</button>
                     </div>
                     <div class="grid md:grid-cols-2 lg:grid-cols-6 gap-4 mt-10" id="owner-stats"></div>
                 </div>
@@ -205,7 +468,16 @@
                     <div class="bg-white rounded-[32px] p-8 shadow-xl border border-slate-50 overflow-x-auto">
                         <h3 class="text-xl font-black mb-5">Twoje lokale — podsumowanie</h3>
                         <table class="w-full text-sm">
-                            <thead class="text-left text-[10px] uppercase tracking-widest text-slate-400 border-b"><tr><th class="py-3">Lokal</th><th>Miasto</th><th>Rezerwacje</th><th>Zapłacone</th><th>Oczekuje</th><th>Dla Ciebie</th></tr></thead>
+                            <thead class="text-left text-[10px] uppercase tracking-widest text-slate-400 border-b">
+                                <tr>
+                                    <th class="py-3">Lokal</th>
+                                    <th>Miasto</th>
+                                    <th>Rezerwacje</th>
+                                    <th>Zapłacone</th>
+                                    <th>Oczekuje</th>
+                                    <th>Dla Ciebie</th>
+                                </tr>
+                            </thead>
                             <tbody id="owner-venues" class="divide-y divide-slate-100"></tbody>
                         </table>
                     </div>
@@ -219,7 +491,18 @@
                 <div class="bg-white rounded-[32px] p-8 shadow-xl border border-slate-50 overflow-x-auto">
                     <h3 class="text-xl font-black mb-5">Rezerwacje w Twoich lokalach</h3>
                     <table class="w-full text-sm">
-                        <thead class="text-left text-[10px] uppercase tracking-widest text-slate-400 border-b"><tr><th class="py-3">Lokal</th><th>Najemca</th><th>Termin</th><th>Status</th><th>Płatność</th><th>Klient płaci</th><th>Prowizja</th><th>Dla Ciebie</th></tr></thead>
+                        <thead class="text-left text-[10px] uppercase tracking-widest text-slate-400 border-b">
+                            <tr>
+                                <th class="py-3">Lokal</th>
+                                <th>Najemca</th>
+                                <th>Termin</th>
+                                <th>Status</th>
+                                <th>Płatność</th>
+                                <th>Klient płaci</th>
+                                <th>Prowizja</th>
+                                <th>Dla Ciebie</th>
+                            </tr>
+                        </thead>
                         <tbody id="owner-bookings" class="divide-y divide-slate-100"></tbody>
                     </table>
                 </div>
@@ -231,10 +514,14 @@
                 <div class="bg-slate-900 text-white rounded-[40px] p-10 shadow-2xl">
                     <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
                         <div>
-                            <p class="text-rose-300 text-[11px] font-black uppercase tracking-[0.25em] mb-3">Panel administracyjny</p>
-                            <h2 class="text-3xl md:text-4xl font-black tracking-tight">Zarządzanie użytkownikami, lokalami i prowizją</h2>
+                            <p class="text-rose-300 text-[11px] font-black uppercase tracking-[0.25em] mb-3">Panel
+                                administracyjny</p>
+                            <h2 class="text-3xl md:text-4xl font-black tracking-tight">Zarządzanie użytkownikami,
+                                lokalami i prowizją</h2>
                         </div>
-                        <button onclick="fetchAdminDashboard()" class="bg-white text-slate-900 px-6 py-3 rounded-2xl font-black text-sm">Odśwież dane</button>
+                        <button onclick="fetchAdminDashboard()"
+                            class="bg-white text-slate-900 px-6 py-3 rounded-2xl font-black text-sm">Odśwież
+                            dane</button>
                     </div>
                     <div class="grid md:grid-cols-3 lg:grid-cols-6 gap-4 mt-10" id="admin-stats"></div>
                 </div>
@@ -242,15 +529,21 @@
                 <div class="grid lg:grid-cols-3 gap-8">
                     <div class="lg:col-span-1 bg-white rounded-[32px] p-8 shadow-xl border border-slate-50">
                         <h3 class="text-xl font-black mb-5">Ustawienia systemu</h3>
-                        <label class="text-[10px] font-black uppercase tracking-widest text-slate-400">Prowizja platformy (%)</label>
+                        <label class="text-[10px] font-black uppercase tracking-widest text-slate-400">Prowizja
+                            platformy (%)</label>
                         <div class="flex gap-3 mt-3">
-                            <input type="number" id="admin-commission" min="0" max="100" step="0.01" class="flex-1 px-5 py-4 bg-slate-50 rounded-2xl outline-none focus:ring-2 ring-rose-500" placeholder="12.50">
-                            <button onclick="saveCommission()" class="btn-fancy text-white px-5 py-4 rounded-2xl font-black">Zapisz</button>
+                            <input type="number" id="admin-commission" min="0" max="100" step="0.01"
+                                class="flex-1 px-5 py-4 bg-slate-50 rounded-2xl outline-none focus:ring-2 ring-rose-500"
+                                placeholder="12.50">
+                            <button onclick="saveCommission()"
+                                class="btn-fancy text-white px-5 py-4 rounded-2xl font-black">Zapisz</button>
                         </div>
-                        <p class="text-xs text-slate-400 mt-4">Ta wartość wpływa na nowe rezerwacje i koszt końcowy w formularzu.</p>
+                        <p class="text-xs text-slate-400 mt-4">Ta wartość wpływa na nowe rezerwacje i koszt końcowy w
+                            formularzu.</p>
                     </div>
 
-                    <div class="lg:col-span-2 bg-white rounded-[32px] p-8 shadow-xl border border-slate-50 overflow-x-auto">
+                    <div
+                        class="lg:col-span-2 bg-white rounded-[32px] p-8 shadow-xl border border-slate-50 overflow-x-auto">
                         <h3 class="text-xl font-black mb-5">Raport ostatnich miesięcy</h3>
                         <div id="admin-monthly" class="space-y-3"></div>
                     </div>
@@ -259,7 +552,16 @@
                 <div class="bg-white rounded-[32px] p-8 shadow-xl border border-slate-50 overflow-x-auto">
                     <h3 class="text-xl font-black mb-5">Użytkownicy</h3>
                     <table class="w-full text-sm">
-                        <thead class="text-left text-[10px] uppercase tracking-widest text-slate-400 border-b"><tr><th class="py-3">Login</th><th>Email</th><th>Rola</th><th>Lokalizacja</th><th>Status</th><th>Akcje</th></tr></thead>
+                        <thead class="text-left text-[10px] uppercase tracking-widest text-slate-400 border-b">
+                            <tr>
+                                <th class="py-3">Login</th>
+                                <th>Email</th>
+                                <th>Rola</th>
+                                <th>Lokalizacja</th>
+                                <th>Status</th>
+                                <th>Akcje</th>
+                            </tr>
+                        </thead>
                         <tbody id="admin-users" class="divide-y divide-slate-100"></tbody>
                     </table>
                 </div>
@@ -267,7 +569,18 @@
                 <div class="bg-white rounded-[32px] p-8 shadow-xl border border-slate-50 overflow-x-auto">
                     <h3 class="text-xl font-black mb-5">Najnowsze rezerwacje</h3>
                     <table class="w-full text-sm">
-                        <thead class="text-left text-[10px] uppercase tracking-widest text-slate-400 border-b"><tr><th class="py-3">Lokal</th><th>Najemca</th><th>Termin</th><th>Status</th><th>Płatność</th><th>Brutto</th><th>Prowizja</th><th>Dla właściciela</th></tr></thead>
+                        <thead class="text-left text-[10px] uppercase tracking-widest text-slate-400 border-b">
+                            <tr>
+                                <th class="py-3">Lokal</th>
+                                <th>Najemca</th>
+                                <th>Termin</th>
+                                <th>Status</th>
+                                <th>Płatność</th>
+                                <th>Brutto</th>
+                                <th>Prowizja</th>
+                                <th>Dla właściciela</th>
+                            </tr>
+                        </thead>
                         <tbody id="admin-bookings" class="divide-y divide-slate-100"></tbody>
                     </table>
                 </div>
@@ -277,13 +590,16 @@
 
     <div id="booking-modal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6 hidden">
         <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-md" onclick="closeModal()"></div>
-        <div class="relative bg-white w-full max-w-6xl max-h-[92vh] rounded-[40px] shadow-2xl overflow-y-auto animate-in fade-in zoom-in duration-300">
+        <div
+            class="relative bg-white w-full max-w-6xl max-h-[92vh] rounded-[40px] shadow-2xl overflow-y-auto animate-in fade-in zoom-in duration-300">
             <div class="grid lg:grid-cols-[0.95fr_1.05fr] gap-0">
                 <div class="bg-slate-50 p-5 lg:p-6">
                     <div id="modal-thumb" class="h-72 lg:h-[420px] bg-slate-100 rounded-[32px] overflow-hidden"></div>
                     <div class="p-5 text-slate-900">
-                        <span id="modal-city" class="text-[10px] font-black text-rose-500 uppercase tracking-[0.2em]">Lokalizacja</span>
-                        <h2 id="modal-title" class="text-3xl font-black text-slate-900 mt-2 tracking-tight">Nazwa lokalu</h2>
+                        <span id="modal-city"
+                            class="text-[10px] font-black text-rose-500 uppercase tracking-[0.2em]">Lokalizacja</span>
+                        <h2 id="modal-title" class="text-3xl font-black text-slate-900 mt-2 tracking-tight">Nazwa lokalu
+                        </h2>
                         <div id="modal-stars" class="stars text-lg mt-2">☆☆☆☆☆</div>
                         <p id="modal-address" class="text-sm text-slate-500 font-bold mt-3">Adres</p>
                         <p id="modal-area" class="text-sm text-slate-400 font-medium mt-1">Powierzchnia</p>
@@ -292,70 +608,101 @@
                     <div class="mx-5 mb-5 p-5 bg-white rounded-3xl border border-slate-100">
                         <div class="flex items-end justify-between gap-4">
                             <div>
-                                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Cena za dobę dla klienta</p>
+                                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Cena za dobę
+                                    dla klienta</p>
                                 <p id="modal-daily-price" class="text-2xl font-black text-slate-900 mt-1">0 zł</p>
                             </div>
-                            <div class="text-right text-[11px] font-bold text-slate-400 max-w-[220px]"><p id="modal-price-note">Cena końcowa za jedną dobę.</p><p id="modal-deposit-note" class="mt-1 text-slate-500">Kaucja: 0 zł</p></div>
+                            <div class="text-right text-[11px] font-bold text-slate-400 max-w-[220px]">
+                                <p id="modal-price-note">Cena końcowa za jedną dobę.</p>
+                                <p id="modal-deposit-note" class="mt-1 text-slate-500">Kaucja: 0 zł</p>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="p-6 lg:p-8 text-slate-900">
                     <div class="flex items-center justify-between gap-4 mb-5">
-                        <button onclick="changeCalendarMonth(-1)" class="px-4 py-3 rounded-2xl bg-slate-100 font-black">‹</button>
+                        <button onclick="changeCalendarMonth(-1)"
+                            class="px-4 py-3 rounded-2xl bg-slate-100 font-black">‹</button>
                         <div class="text-center">
-                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Wybierz termin</p>
+                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Wybierz termin
+                            </p>
                             <h3 id="calendar-title" class="text-2xl font-black tracking-tight">Miesiąc</h3>
                         </div>
-                        <button onclick="changeCalendarMonth(1)" class="px-4 py-3 rounded-2xl bg-slate-100 font-black">›</button>
+                        <button onclick="changeCalendarMonth(1)"
+                            class="px-4 py-3 rounded-2xl bg-slate-100 font-black">›</button>
                     </div>
-                    <div class="calendar-grid text-center text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">
-                        <div>Pon</div><div>Wt</div><div>Śr</div><div>Czw</div><div>Pt</div><div>Sob</div><div>Nd</div>
+                    <div
+                        class="calendar-grid text-center text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">
+                        <div>Pon</div>
+                        <div>Wt</div>
+                        <div>Śr</div>
+                        <div>Czw</div>
+                        <div>Pt</div>
+                        <div>Sob</div>
+                        <div>Nd</div>
                     </div>
                     <div id="calendar-grid" class="calendar-grid mb-4"></div>
                     <div class="flex flex-wrap gap-3 text-xs font-bold text-slate-500 mb-6">
-                        <span class="inline-flex items-center gap-2"><i class="w-3 h-3 rounded-full bg-emerald-200"></i> wolne</span>
-                        <span class="inline-flex items-center gap-2"><i class="w-3 h-3 rounded-full bg-rose-200"></i> zajęte</span>
-                        <span class="inline-flex items-center gap-2"><i class="w-3 h-3 rounded-full bg-slate-200"></i> niedostępne</span>
+                        <span class="inline-flex items-center gap-2"><i class="w-3 h-3 rounded-full bg-emerald-200"></i>
+                            wolne</span>
+                        <span class="inline-flex items-center gap-2"><i class="w-3 h-3 rounded-full bg-rose-200"></i>
+                            zajęte</span>
+                        <span class="inline-flex items-center gap-2"><i class="w-3 h-3 rounded-full bg-slate-200"></i>
+                            niedostępne</span>
                     </div>
 
                     <input type="hidden" id="start">
                     <input type="hidden" id="end">
                     <div class="grid md:grid-cols-2 gap-4 mb-6">
                         <div class="p-5 bg-slate-50 rounded-3xl border border-slate-100">
-                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Wybrany termin</p>
-                            <p id="selected-range" class="font-black text-slate-900 mt-2">Kliknij pierwszy dzień, potem ostatni. Ta sama data drugi raz = 1 dzień.</p>
+                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Wybrany termin
+                            </p>
+                            <p id="selected-range" class="font-black text-slate-900 mt-2">Kliknij pierwszy dzień, potem
+                                ostatni. Ta sama data drugi raz = 1 dzień.</p>
                         </div>
                         <div class="p-5 bg-slate-50 rounded-3xl border border-slate-100">
-                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Forma płatności</p>
-                            <select id="payment-method" class="w-full px-4 py-3 bg-white rounded-2xl outline-none focus:ring-2 ring-rose-500 font-bold text-slate-700">
+                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Forma
+                                płatności</p>
+                            <select id="payment-method"
+                                class="w-full px-4 py-3 bg-white rounded-2xl outline-none focus:ring-2 ring-rose-500 font-bold text-slate-700">
                                 <option value="ONLINE">Płatność online</option>
                                 <option value="GOTOWKA">Gotówka</option>
                             </select>
                         </div>
                     </div>
-                    <div id="total-row" class="hidden flex items-center justify-between p-6 bg-slate-900 text-white rounded-3xl mb-6">
+                    <div id="total-row"
+                        class="hidden flex items-center justify-between p-6 bg-slate-900 text-white rounded-3xl mb-6">
                         <span class="font-bold text-slate-400 text-xs uppercase tracking-widest">Suma do zapłaty</span>
                         <span id="total-val" class="text-2xl font-black text-white">0 zł</span>
                     </div>
-                    <div class="flex gap-4 mb-8"><button onclick="closeModal()" class="flex-1 py-4 border-2 border-slate-100 rounded-2xl font-bold text-slate-400 text-sm">Cofnij</button><button onclick="submitBooking()" class="flex-[2] btn-fancy text-white py-4 rounded-2xl font-black uppercase tracking-widest text-xs">Rezerwuję</button></div>
+                    <div class="flex gap-4 mb-8"><button onclick="closeModal()"
+                            class="flex-1 py-4 border-2 border-slate-100 rounded-2xl font-bold text-slate-400 text-sm">Cofnij</button><button
+                            onclick="submitBooking()"
+                            class="flex-[2] btn-fancy text-white py-4 rounded-2xl font-black uppercase tracking-widest text-xs">Rezerwuję</button>
+                    </div>
 
                     <div class="border-t border-slate-100 pt-6">
                         <h3 class="text-xl font-black mb-4">Opinie</h3>
                         <div id="reviews-list" class="space-y-3 mb-5"></div>
                         <div class="p-4 bg-slate-50 rounded-3xl border border-slate-100">
-                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">Dodaj opinię</p>
+                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">Dodaj opinię
+                            </p>
                             <div class="grid md:grid-cols-[140px_1fr] gap-3">
-                                <select id="review-rating" class="px-4 py-3 bg-white rounded-2xl outline-none focus:ring-2 ring-rose-500 font-bold text-slate-700">
+                                <select id="review-rating"
+                                    class="px-4 py-3 bg-white rounded-2xl outline-none focus:ring-2 ring-rose-500 font-bold text-slate-700">
                                     <option value="5">★★★★★ 5</option>
                                     <option value="4">★★★★☆ 4</option>
                                     <option value="3">★★★☆☆ 3</option>
                                     <option value="2">★★☆☆☆ 2</option>
                                     <option value="1">★☆☆☆☆ 1</option>
                                 </select>
-                                <input id="review-comment" type="text" placeholder="Napisz krótką opinię..." class="px-4 py-3 bg-white rounded-2xl outline-none focus:ring-2 ring-rose-500">
+                                <input id="review-comment" type="text" placeholder="Napisz krótką opinię..."
+                                    class="px-4 py-3 bg-white rounded-2xl outline-none focus:ring-2 ring-rose-500">
                             </div>
-                            <button onclick="submitReview()" class="mt-3 bg-slate-900 text-white px-5 py-3 rounded-2xl font-black text-xs uppercase tracking-widest">Dodaj opinię</button>
+                            <button onclick="submitReview()"
+                                class="mt-3 bg-slate-900 text-white px-5 py-3 rounded-2xl font-black text-xs uppercase tracking-widest">Dodaj
+                                opinię</button>
                         </div>
                     </div>
                 </div>
@@ -375,7 +722,7 @@
         let selectedEnd = '';
 
         function escapeHtml(value) {
-            return String(value ?? '').replace(/[&<>'"]/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[char]));
+            return String(value ?? '').replace(/[&<>'"]/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[char]));
         }
 
         function money(value) { return `${Math.round(Number(value || 0))} zł`; }
@@ -427,7 +774,7 @@
         function polishDobaLabel(days) {
             const n = Number(days || 0);
             if (n === 1) return '1 doba';
-            if ([2,3,4].includes(n % 10) && ![12,13,14].includes(n % 100)) return `${n} doby`;
+            if ([2, 3, 4].includes(n % 10) && ![12, 13, 14].includes(n % 100)) return `${n} doby`;
             return `${n} dób`;
         }
 
@@ -438,11 +785,11 @@
         }
 
         function roleLabel(role) {
-            return { Role_Admin:'Administrator', Role_Owner:'Właściciel', Role_Renter:'Najemca' }[role] || role || 'Użytkownik';
+            return { Role_Admin: 'Administrator', Role_Owner: 'Właściciel', Role_Renter: 'Najemca' }[role] || role || 'Użytkownik';
         }
 
         function statusLabel(status) {
-            return { OCZEKUJACA:'Oczekująca', POTWIERDZONA:'Potwierdzona', OPLACONA:'Opłacona', ZREALIZOWANA:'Zrealizowana', ANULOWANA:'Anulowana', ZAREZERWOWANO:'Oczekująca', 'OPŁACONO':'Opłacona', OPLACONO:'Opłacona' }[status] || status || 'Aktywna';
+            return { OCZEKUJACA: 'Oczekująca', POTWIERDZONA: 'Potwierdzona', OPLACONA: 'Opłacona', ZREALIZOWANA: 'Zrealizowana', ANULOWANA: 'Anulowana', ZAREZERWOWANO: 'Oczekująca', 'OPŁACONO': 'Opłacona', OPLACONO: 'Opłacona' }[status] || status || 'Aktywna';
         }
 
         function isAdmin() { return localStorage.getItem('role') === 'Role_Admin'; }
@@ -475,7 +822,7 @@
                 fillProvinceSelect('v-province');
                 loadCitiesIntoSelect('r-city', document.getElementById('r-province')?.value || '');
                 loadCitiesIntoSelect('v-city', document.getElementById('v-province')?.value || '');
-            } catch(e) { console.error(e); }
+            } catch (e) { console.error(e); }
         }
 
         function fillProvinceSelect(id) {
@@ -514,7 +861,10 @@
             const hero = document.getElementById('hero-section');
             id === 'browse' ? hero.classList.remove('hidden') : hero.classList.add('hidden');
             if (id === 'browse') fetchVenues();
-            if (id === 'bookings') { fetchBookings(); fetchMyVenues(); }
+            if (id === 'bookings') {
+                fetchBookings();
+                if (isOwner() || isAdmin()) fetchMyVenues();
+            }
             if (id === 'account') loadLocationSelects();
             if (id === 'admin') fetchAdminDashboard();
             if (id === 'owner') fetchOwnerDashboard();
@@ -643,7 +993,7 @@
         function renderCalendar() {
             const grid = document.getElementById('calendar-grid');
             if (!grid || !currentVenueObj) return;
-            const monthNames = ['styczeń','luty','marzec','kwiecień','maj','czerwiec','lipiec','sierpień','wrzesień','październik','listopad','grudzień'];
+            const monthNames = ['styczeń', 'luty', 'marzec', 'kwiecień', 'maj', 'czerwiec', 'lipiec', 'sierpień', 'wrzesień', 'październik', 'listopad', 'grudzień'];
             const y = calendarMonth.getFullYear();
             const m = calendarMonth.getMonth();
             document.getElementById('calendar-title').textContent = `${monthNames[m]} ${y}`;
@@ -729,7 +1079,7 @@
             const rating = document.getElementById('review-rating').value;
             const comment = document.getElementById('review-comment').value.trim();
             try {
-                const r = await fetch(`${API}/venues/${currentVenue}/reviews/`, { method:'POST', headers:{'Content-Type':'application/json','Authorization':`Token ${token}`}, body:JSON.stringify({ rating, comment }) });
+                const r = await fetch(`${API}/venues/${currentVenue}/reviews/`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Token ${token}` }, body: JSON.stringify({ rating, comment }) });
                 const data = await r.json().catch(() => ({}));
                 if (r.ok) {
                     toast('Opinia dodana.', 'success');
@@ -742,21 +1092,21 @@
                     renderReviews(fresh.reviews || []);
                     renderVenues(allVenues);
                 } else toast(apiError(data, 'Nie udało się dodać opinii.'), 'error');
-            } catch(e) { console.error(e); toast('Błąd połączenia z serwerem.', 'error'); }
+            } catch (e) { console.error(e); toast('Błąd połączenia z serwerem.', 'error'); }
         }
 
         async function handleLogin() {
             try {
                 const r = await fetch(`${API}/login/`, {
-                    method:'POST', headers:{'Content-Type':'application/json'},
-                    body:JSON.stringify({ username:document.getElementById('l-user').value.trim(), password:document.getElementById('l-pass').value })
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: document.getElementById('l-user').value.trim(), password: document.getElementById('l-pass').value })
                 });
                 const data = await r.json().catch(() => ({}));
                 if (r.ok) {
                     localStorage.setItem('token', data.token); localStorage.setItem('user', data.username); localStorage.setItem('role', data.role);
                     checkAuth(); showSection(data.role === 'Role_Admin' ? 'admin' : data.role === 'Role_Owner' ? 'owner' : 'browse'); toast('Zalogowano pomyślnie!', 'success');
                 } else toast(apiError(data, 'Nie udało się zalogować.'), 'error');
-            } catch(e) { console.error(e); toast('Błąd połączenia z serwerem.', 'error'); }
+            } catch (e) { console.error(e); toast('Błąd połączenia z serwerem.', 'error'); }
         }
 
         async function handleRegister() {
@@ -770,7 +1120,7 @@
             };
             if (!payload.username || !payload.email || !payload.password) { toast('Wypełnij login, e-mail i hasło.', 'error'); return; }
             try {
-                const response = await fetch(`${API}/register/`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
+                const response = await fetch(`${API}/register/`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
                 const data = await response.json().catch(() => ({}));
                 if (response.ok) {
                     localStorage.setItem('token', data.token); localStorage.setItem('user', data.username); localStorage.setItem('role', data.role);
@@ -791,6 +1141,11 @@
             document.getElementById('nav-owner').classList.toggle('hidden', !ownerLike);
             document.getElementById('profile-admin-btn').classList.toggle('hidden', role !== 'Role_Admin');
             document.getElementById('profile-owner-btn').classList.toggle('hidden', !ownerLike);
+            const bookingsCard = document.getElementById('bookings-card');
+            const bookingsVenuesCard = document.getElementById('bookings-venues-card');
+
+            if (bookingsVenuesCard) bookingsVenuesCard.classList.toggle('hidden', !ownerLike);
+            if (bookingsCard) bookingsCard.classList.toggle('md:col-span-2', !ownerLike);
             if (t) {
                 document.getElementById('login-form').classList.add('hidden');
                 document.getElementById('register-form').classList.add('hidden');
@@ -829,15 +1184,21 @@
             const role = document.getElementById('account-role').value;
             if (!token) { toast('Zaloguj się, aby zmienić ustawienia konta.', 'error'); return; }
             try {
-                const r = await fetch(`${API}/me/`, { method:'PATCH', headers:{'Content-Type':'application/json','Authorization':`Token ${token}`}, body:JSON.stringify({ role }) });
+                const r = await fetch(`${API}/me/`, { method: 'PATCH', headers: { 'Content-Type': 'application/json', 'Authorization': `Token ${token}` }, body: JSON.stringify({ role }) });
                 const data = await r.json().catch(() => ({}));
                 if (r.ok) {
                     localStorage.setItem('role', data.role);
                     checkAuth();
+                    fetchVenues();
+
                     toast(data.role === 'Role_Owner' ? 'Zmieniono rolę. Panel zarządzania jest teraz dostępny.' : 'Zmieniono rolę. Panel zarządzania został ukryty.', 'success');
-                    if (data.role === 'Role_Owner') fetchOwnerDashboard();
+
+                    if (data.role === 'Role_Owner') {
+                        fetchOwnerDashboard();
+                        fetchMyVenues();
+                    }
                 } else toast(apiError(data, 'Nie udało się zmienić roli.'), 'error');
-            } catch(e) { console.error(e); toast('Błąd połączenia z serwerem.', 'error'); }
+            } catch (e) { console.error(e); toast('Błąd połączenia z serwerem.', 'error'); }
         }
 
         function handleLogout() { localStorage.clear(); checkAuth(); showSection('browse'); toast('Wylogowano.'); }
@@ -848,33 +1209,33 @@
             const adminMode = isAdmin();
             if (!token) { list.innerHTML = '<div class="text-center py-12 text-slate-400 font-medium">Zaloguj się, aby zobaczyć rezerwacje.</div>'; return; }
             try {
-                const r = await fetch(`${API}/bookings/`, { headers:{'Authorization':`Token ${token}`} });
+                const r = await fetch(`${API}/bookings/`, { headers: { 'Authorization': `Token ${token}` } });
                 const data = await r.json().catch(() => []);
                 if (!r.ok) { list.innerHTML = `<div class="text-center py-12 text-rose-400 font-medium">${escapeHtml(apiError(data))}</div>`; return; }
                 if (!data.length) { list.innerHTML = `<div class="text-center py-12 text-slate-400 font-medium">${adminMode ? 'Brak rezerwacji w systemie.' : 'Brak aktywnych rezerwacji.'}</div>`; return; }
                 list.innerHTML = data.map(b => {
                     const bId = b.booking_id || b.id;
-                    const pendingPayment = !adminMode && b.payment_status === 'OCZEKUJACA' && !['OPLACONA','ANULOWANA','ZREALIZOWANA','OPŁACONO','OPLACONO'].includes(b.status);
-                    const canCancel = !adminMode && !['ANULOWANA','ZREALIZOWANA','OPLACONA'].includes(b.status);
+                    const pendingPayment = !adminMode && b.payment_status === 'OCZEKUJACA' && !['OPLACONA', 'ANULOWANA', 'ZREALIZOWANA', 'OPŁACONO', 'OPLACONO'].includes(b.status);
+                    const canCancel = !adminMode && !['ANULOWANA', 'ZREALIZOWANA', 'OPLACONA'].includes(b.status);
                     return `<div class="p-5 bg-slate-50 rounded-[28px] border border-slate-100 space-y-4 text-slate-900 ${b.status === 'ANULOWANA' ? 'opacity-60' : ''}">
-                        <div class="flex justify-between items-start gap-4"><div><p class="font-black text-lg">${escapeHtml(b.venue_name || 'Lokal')}</p><p class="text-xs text-slate-400 font-bold mt-1">${escapeHtml(b.venue_address || '')} ${b.venue_city ? '· ' + escapeHtml(b.venue_city) : ''}</p><div class="flex items-center gap-2 mt-2 flex-wrap"><span class="text-[9px] font-black uppercase px-2 py-0.5 rounded-md ${b.status === 'OPLACONA' ? 'bg-emerald-100 text-emerald-600' : b.status === 'ANULOWANA' ? 'bg-rose-100 text-rose-600' : 'bg-amber-100 text-amber-600'}">${statusLabel(b.status)}</span><span class="text-[9px] font-black uppercase px-2 py-0.5 rounded-md ${b.payment_method === 'GOTOWKA' ? 'bg-slate-200 text-slate-600' : 'bg-blue-100 text-blue-600'}">${b.payment_method === 'GOTOWKA' ? 'Gotówka' : 'Online'}</span><span class="text-[9px] font-black uppercase px-2 py-0.5 rounded-md ${b.payment_status === 'OPLACONA' ? 'bg-emerald-100 text-emerald-600' : 'bg-amber-100 text-amber-600'}">Płatność: ${statusLabel(b.payment_status)}</span><p class="text-[11px] font-bold text-slate-400">${bookingDateRange(b)}</p></div></div><div class="text-right"><p class="font-black text-xl">${money(b.total_cost)}</p></div></div>
+                        <div class="flex justify-between items-start gap-4"><div><p class="font-black text-lg">${escapeHtml(b.venue_name || 'Lokal')}</p><p class="text-xs text-slate-400 font-bold mt-1">${escapeHtml(b.venue_address || '')} ${b.venue_city ? '· ' + escapeHtml(b.venue_city) : ''}</p><div class="flex items-center gap-2 mt-2 flex-wrap"><span class="text-[9px] font-black uppercase px-2 py-0.5 rounded-md ${b.status === 'OPLACONA' ? 'bg-emerald-100 text-emerald-600' : b.status === 'ANULOWANA' ? 'bg-rose-100 text-rose-600' : 'bg-amber-100 text-amber-600'}">${statusLabel(b.status)}</span><span class="text-[9px] font-black uppercase px-2 py-0.5 rounded-md ${b.payment_method === 'GOTOWKA' ? 'bg-slate-200 text-slate-600' : 'bg-blue-100 text-blue-600'}">${b.payment_method === 'GOTOWKA' ? 'Gotówka' : 'Online'}</span><p class="text-[11px] font-bold text-slate-400">${bookingDateRange(b)}</p></div></div><div class="text-right"><p class="font-black text-xl">${money(b.total_cost)}</p></div></div>
                         ${pendingPayment ? `<div class="grid md:grid-cols-[1fr_auto_auto] gap-3 pt-2"><select onchange="changePaymentMethod(${bId}, this.value)" class="px-4 py-3 bg-white rounded-xl font-bold text-sm"><option value="ONLINE" ${b.payment_method === 'ONLINE' ? 'selected' : ''}>Płatność online</option><option value="GOTOWKA" ${b.payment_method === 'GOTOWKA' ? 'selected' : ''}>Gotówka</option></select>${b.payment_method === 'ONLINE' ? `<button onclick="payBooking(${bId})" class="btn-pay text-white px-5 py-3 rounded-xl font-bold text-xs uppercase tracking-wider shadow-lg shadow-emerald-100 transition-all">Opłać online</button>` : `<span class="px-5 py-3 rounded-xl bg-slate-200 text-slate-500 font-black text-xs uppercase text-center">Płatność gotówką oczekuje</span>`}${canCancel ? `<button onclick="cancelBooking(${bId})" class="btn-delete px-4 py-3 rounded-xl font-bold text-xs uppercase transition-colors">Anuluj</button>` : ''}</div>` : ''}
                     </div>`;
                 }).join('');
-            } catch(e) { console.error(e); toast('Nie udało się pobrać rezerwacji.', 'error'); }
+            } catch (e) { console.error(e); toast('Nie udało się pobrać rezerwacji.', 'error'); }
         }
 
         async function updateBooking(id, payload, successMessage = 'Rezerwacja zaktualizowana.') {
             try {
-                const r = await fetch(`${API}/bookings/${id}/`, { method:'PATCH', headers:{'Content-Type':'application/json','Authorization':`Token ${localStorage.getItem('token')}`}, body:JSON.stringify(payload) });
+                const r = await fetch(`${API}/bookings/${id}/`, { method: 'PATCH', headers: { 'Content-Type': 'application/json', 'Authorization': `Token ${localStorage.getItem('token')}` }, body: JSON.stringify(payload) });
                 const data = await r.json().catch(() => ({}));
                 if (r.ok) { toast(successMessage, 'success'); fetchBookings(); if (isOwner() || isAdmin()) fetchOwnerDashboard(); }
                 else toast(apiError(data, 'Nie udało się zmienić rezerwacji.'), 'error');
-            } catch(e) { console.error(e); toast('Błąd połączenia z serwerem.', 'error'); }
+            } catch (e) { console.error(e); toast('Błąd połączenia z serwerem.', 'error'); }
         }
-        function cancelBooking(id) { updateBooking(id, { status:'ANULOWANA' }, 'Rezerwacja anulowana.'); }
-        function payBooking(id) { updateBooking(id, { status:'OPLACONA' }, 'Opłacono pomyślnie!'); }
-        function changePaymentMethod(id, method) { updateBooking(id, { payment_method:method }, method === 'GOTOWKA' ? 'Zmieniono na płatność gotówką.' : 'Zmieniono na płatność online.'); }
+        function cancelBooking(id) { updateBooking(id, { status: 'ANULOWANA' }, 'Rezerwacja anulowana.'); }
+        function payBooking(id) { updateBooking(id, { status: 'OPLACONA' }, 'Opłacono pomyślnie!'); }
+        function changePaymentMethod(id, method) { updateBooking(id, { payment_method: method }, method === 'GOTOWKA' ? 'Zmieniono na płatność gotówką.' : 'Zmieniono na płatność online.'); }
 
         async function fetchMyVenues() {
             const list = document.getElementById('my-venues-list');
@@ -883,14 +1244,14 @@
             const token = localStorage.getItem('token');
             if (!token) { writeLists('<div class="text-center py-12 text-slate-400 font-medium">Zaloguj się, aby zobaczyć swoje lokale.</div>'); return; }
             try {
-                const r = await fetch(`${API}/my-venues/`, { headers:{'Authorization':`Token ${token}`} });
+                const r = await fetch(`${API}/my-venues/`, { headers: { 'Authorization': `Token ${token}` } });
                 const data = await r.json().catch(() => []);
                 if (!r.ok) { writeLists(`<div class="text-center py-12 text-rose-400 font-medium">${escapeHtml(apiError(data, 'Nie udało się pobrać Twoich lokali.'))}</div>`); return; }
                 const myVenues = Array.isArray(data) ? data : [];
                 if (!myVenues.length) { writeLists('<div class="text-center py-12 text-slate-400 font-medium">Nie masz jeszcze żadnych ofert.</div>'); return; }
                 const html = myVenues.map(v => `<div class="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100"><div class="flex items-center gap-4 text-slate-900"><div class="w-12 h-12 rounded-xl overflow-hidden bg-slate-200 shrink-0">${v.photo_url ? `<img src="${v.photo_url}" class="w-full h-full object-cover">` : '<div class="w-full h-full flex items-center justify-center text-xl">🏢</div>'}</div><div><p class="font-black">${escapeHtml(v.name)}</p><p class="text-[10px] font-bold text-rose-500 uppercase tracking-wider">${escapeHtml(v.city_name)} / ${escapeHtml(v.province_name)}</p><p class="text-[10px] text-slate-400 font-bold">${escapeHtml(v.street_address || 'Adres do uzupełnienia')} · ${Number(v.area_m2 || 0)} m²</p></div></div><div class="flex items-center gap-3"><p class="font-black text-slate-900" title="Cena bazowa bez prowizji">${money(v.price_per_day)}</p><button onclick="deleteVenue(${v.venue_id || v.id})" class="btn-delete px-3 py-2 rounded-xl font-bold text-xs uppercase tracking-wide transition-colors" title="Usuń lokal">🗑️ Usuń</button></div></div>`).join('');
                 writeLists(html);
-            } catch(e) { console.error(e); writeLists('<div class="text-center py-12 text-rose-400 font-medium">Błąd połączenia z serwerem.</div>'); }
+            } catch (e) { console.error(e); writeLists('<div class="text-center py-12 text-rose-400 font-medium">Błąd połączenia z serwerem.</div>'); }
         }
 
         async function submitVenue() {
@@ -901,16 +1262,16 @@
             // Dzięki temu localStorage nie może pokazywać starego „Panelu właściciela”,
             // gdy token lub rola w bazie są już inne.
             try {
-                const meResp = await fetch(`${API}/me/`, { headers:{'Authorization':`Token ${token}`} });
+                const meResp = await fetch(`${API}/me/`, { headers: { 'Authorization': `Token ${token}` } });
                 const me = await meResp.json().catch(() => ({}));
                 if (!meResp.ok) { toast(apiError(me, 'Sesja wygasła. Zaloguj się ponownie.'), 'error'); localStorage.clear(); checkAuth(); showSection('account'); return; }
                 localStorage.setItem('role', me.role);
                 localStorage.setItem('user', me.username);
                 checkAuth();
                 if (!['Role_Owner', 'Role_Admin'].includes(me.role)) { toast('To konto jest najemcą. Zmień typ konta na właściciela, żeby wystawić lokal.', 'error'); return; }
-            } catch(e) { console.error(e); toast('Nie udało się sprawdzić konta. Spróbuj ponownie.', 'error'); return; }
+            } catch (e) { console.error(e); toast('Nie udało się sprawdzić konta. Spróbuj ponownie.', 'error'); return; }
 
-            const fields = ['v-name','v-province','v-city','v-street','v-capacity','v-area','v-price','v-available-from','v-available-to'];
+            const fields = ['v-name', 'v-province', 'v-city', 'v-street', 'v-capacity', 'v-area', 'v-price', 'v-available-from', 'v-available-to'];
             if (fields.some(id => !document.getElementById(id).value.trim())) { toast('Wypełnij nazwę, adres, województwo, miasto, pojemność, powierzchnię, cenę i terminy dostępności.', 'error'); return; }
             const formData = new FormData();
             formData.append('name', document.getElementById('v-name').value.trim());
@@ -927,38 +1288,47 @@
             const img = document.getElementById('v-image');
             if (img.files[0]) formData.append('photo', img.files[0]);
             try {
-                const r = await fetch(`${API}/venues/`, { method:'POST', headers:{'Authorization':`Token ${token}`}, body:formData });
+                const r = await fetch(`${API}/venues/`, { method: 'POST', headers: { 'Authorization': `Token ${token}` }, body: formData });
                 const data = await r.json().catch(() => ({}));
                 if (!r.ok) { toast(apiError(data, 'Błąd przy dodawaniu lokalu.'), 'error'); return; }
 
                 const newId = data.venue_id || data.id;
-                const mineResp = await fetch(`${API}/my-venues/`, { headers:{'Authorization':`Token ${token}`} });
+                const mineResp = await fetch(`${API}/my-venues/`, { headers: { 'Authorization': `Token ${token}` } });
                 const mine = await mineResp.json().catch(() => []);
                 if (!mineResp.ok) { toast(apiError(mine, 'Lokal zapisany, ale nie udało się odświeżyć Twoich ofert.'), 'error'); return; }
                 const visibleInMine = Array.isArray(mine) && mine.some(v => (v.venue_id || v.id) === newId);
                 if (!visibleInMine) {
                     toast('Lokal nie został przypisany do Twojego konta. Odśwież stronę i zaloguj się ponownie.', 'error');
-                    console.warn('Dodany lokal nie pojawił się w /api/my-venues/', { created:data, myVenues:mine });
+                    console.warn('Dodany lokal nie pojawił się w /api/my-venues/', { created: data, myVenues: mine });
                     return;
                 }
 
                 allVenues = [data, ...allVenues.filter(v => (v.venue_id || v.id) !== newId)];
                 renderVenues(allVenues);
-                ['v-name','v-street','v-area','v-price','v-desc','v-city','v-province','v-image','v-capacity','v-deposit','v-available-from','v-available-to'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+                ['v-name', 'v-street', 'v-area', 'v-price', 'v-desc', 'v-city', 'v-province', 'v-image', 'v-capacity', 'v-deposit', 'v-available-from', 'v-available-to'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
                 loadCitiesIntoSelect('v-city', '');
                 fetchVenues();
                 fetchMyVenues();
                 if (isOwner() || isAdmin()) fetchOwnerDashboard();
                 showSection('bookings');
                 toast((isAdmin() ? 'Lokal dodany i widoczny w „Rezerwacje” → „Lokale”.' : 'Lokal dodany i widoczny w „Rezerwacje” → „Twoje lokale”.'), 'success');
-            } catch(e) { console.error(e); toast('Błąd połączenia z serwerem.', 'error'); }
+            } catch (e) { console.error(e); toast('Błąd połączenia z serwerem.', 'error'); }
         }
 
         async function deleteVenue(id) {
             if (!confirm('Czy na pewno chcesz usunąć ten lokal?')) return;
-            const r = await fetch(`${API}/venues/${id}/`, { method:'DELETE', headers:{'Authorization':`Token ${localStorage.getItem('token')}`} });
+            const r = await fetch(`${API}/venues/${id}/`, { method: 'DELETE', headers: { 'Authorization': `Token ${localStorage.getItem('token')}` } });
             const data = await r.json().catch(() => ({}));
-            if (r.ok) { toast('Lokal usunięty.', 'success'); fetchVenues(); fetchMyVenues(); if (isAdmin()) fetchAdminDashboard(); }
+            if (r.ok) {
+                toast('Lokal usunięty.', 'success');
+
+                fetchVenues();
+                fetchMyVenues();
+                fetchBookings();
+
+                if (isOwner() || isAdmin()) fetchOwnerDashboard();
+                if (isAdmin()) fetchAdminDashboard();
+            }
             else toast(apiError(data, 'Błąd przy usuwaniu lokalu.'), 'error');
         }
 
@@ -969,17 +1339,17 @@
             const token = localStorage.getItem('token');
             if (!token) { toast('Zaloguj się, aby rezerwować.', 'error'); showSection('account'); closeModal(); return; }
             try {
-                const r = await fetch(`${API}/bookings/`, { method:'POST', headers:{'Content-Type':'application/json','Authorization':`Token ${token}`}, body:JSON.stringify({ venue:currentVenue, start_date:s + 'T12:00:00Z', end_date:e + 'T12:00:00Z', payment_method:document.getElementById('payment-method').value }) });
+                const r = await fetch(`${API}/bookings/`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Token ${token}` }, body: JSON.stringify({ venue: currentVenue, start_date: s + 'T12:00:00Z', end_date: e + 'T12:00:00Z', payment_method: document.getElementById('payment-method').value }) });
                 const data = await r.json().catch(() => ({}));
                 if (r.ok) { closeModal(); toast(document.getElementById('payment-method').value === 'GOTOWKA' ? 'Zarezerwowano. Płatność gotówką ma status oczekujący.' : 'Zarezerwowano pomyślnie!', 'success'); fetchBookings(); }
                 else toast(apiError(data, 'Błąd rezerwacji.'), 'error');
-            } catch(e) { console.error(e); toast('Błąd połączenia z serwerem.', 'error'); }
+            } catch (e) { console.error(e); toast('Błąd połączenia z serwerem.', 'error'); }
         }
 
         async function fetchOwnerDashboard() {
             if (!(isOwner() || isAdmin())) return;
             try {
-                const r = await fetch(`${API}/owner/dashboard/`, { headers:{'Authorization':`Token ${localStorage.getItem('token')}`} });
+                const r = await fetch(`${API}/owner/dashboard/`, { headers: { 'Authorization': `Token ${localStorage.getItem('token')}` } });
                 const data = await r.json().catch(() => ({}));
                 if (!r.ok) { toast(apiError(data, 'Nie udało się pobrać panelu zarządzania.'), 'error'); return; }
                 document.getElementById('owner-stats').innerHTML = [
@@ -996,13 +1366,13 @@
                 document.getElementById('owner-monthly').innerHTML = (data.monthly || []).length ? data.monthly.map(m => `<div class="p-4 bg-slate-50 rounded-2xl"><div class="flex justify-between gap-4"><b>${m.month}</b><span class="text-slate-400 text-xs">${m.bookings} rez.</span></div><div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-3 text-xs"><div><b>Zapłacone:</b> ${money(m.paid_gross_revenue)}</div><div><b>Oczekuje:</b> ${money(m.pending_gross_revenue)}</div><div><b>Prowizja zapł.:</b> ${money(m.paid_platform_commission)}</div><div><b>Dla mnie zapł.:</b> ${money(m.paid_owner_payout)}</div></div></div>`).join('') : '<p class="text-slate-400">Brak danych raportowych.</p>';
 
                 document.getElementById('owner-bookings').innerHTML = (data.bookings || []).length ? data.bookings.map(b => `<tr><td class="py-4 font-black">${escapeHtml(b.venue_name)}</td><td>${escapeHtml(b.renter_username || '-')}</td><td>${bookingDateRange(b)}</td><td>${statusLabel(b.status)}</td><td>${b.payment_method === 'GOTOWKA' ? 'Gotówka' : 'Online'} / ${statusLabel(b.payment_status)}</td><td class="font-black">${money(b.total_cost)}</td><td>${money(b.platform_commission)}</td><td class="font-black">${money(b.owner_payout)}</td></tr>`).join('') : '<tr><td colspan="8" class="py-8 text-center text-slate-400">Brak rezerwacji w Twoich lokalach.</td></tr>';
-            } catch(e) { console.error(e); toast('Błąd połączenia z serwerem.', 'error'); }
+            } catch (e) { console.error(e); toast('Błąd połączenia z serwerem.', 'error'); }
         }
 
         async function fetchAdminDashboard() {
             if (!isAdmin()) return;
             try {
-                const r = await fetch(`${API}/admin/dashboard/`, { headers:{'Authorization':`Token ${localStorage.getItem('token')}`} });
+                const r = await fetch(`${API}/admin/dashboard/`, { headers: { 'Authorization': `Token ${localStorage.getItem('token')}` } });
                 const data = await r.json().catch(() => ({}));
                 if (!r.ok) { toast(apiError(data, 'Nie udało się pobrać panelu administracyjnego.'), 'error'); return; }
                 document.getElementById('admin-commission').value = data.stats.commission_rate;
@@ -1017,18 +1387,18 @@
                 document.getElementById('admin-monthly').innerHTML = (data.monthly || []).length ? data.monthly.map(m => `<div class="p-4 bg-slate-50 rounded-2xl"><div class="flex items-center justify-between gap-4"><div class="w-24 font-black text-slate-500">${m.month}</div><div class="flex-1 bg-slate-200 rounded-full h-3 overflow-hidden"><div class="bg-rose-500 h-full" style="width:${Math.min(100, m.paid_gross_revenue / Math.max(1, data.stats.paid_gross_revenue) * 100)}%"></div></div><div class="w-20 text-right text-slate-400 text-xs">${m.bookings} rez.</div></div><div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-3 text-xs"><div><b>Zapłacone:</b> ${money(m.paid_gross_revenue)}</div><div><b>Oczekuje:</b> ${money(m.pending_gross_revenue)}</div><div><b>Prowizja zapł.:</b> ${money(m.paid_platform_commission)}</div><div><b>Właściciele zapł.:</b> ${money(m.paid_owner_payout)}</div></div></div>`).join('') : '<p class="text-slate-400">Brak danych raportowych.</p>';
                 document.getElementById('admin-users').innerHTML = data.users.map(u => `<tr><td class="py-4 font-black">${escapeHtml(u.username)}</td><td>${escapeHtml(u.email)}</td><td><select onchange="changeUserRole(${u.user_id}, this.value)" class="bg-slate-50 rounded-xl px-3 py-2"><option value="Role_Renter" ${u.role === 'Role_Renter' ? 'selected' : ''}>Najemca</option><option value="Role_Owner" ${u.role === 'Role_Owner' ? 'selected' : ''}>Właściciel</option><option value="Role_Admin" ${u.role === 'Role_Admin' ? 'selected' : ''}>Admin</option></select></td><td>${escapeHtml(u.city_name || '-')} ${u.province_name ? '/ ' + escapeHtml(u.province_name) : ''}</td><td><span class="px-3 py-1 rounded-full text-[10px] font-black uppercase ${u.is_active ? 'bg-emerald-100 text-emerald-600' : 'bg-rose-100 text-rose-600'}">${u.is_active ? 'Aktywne' : 'Zablokowane'}</span></td><td><button onclick="toggleUserActive(${u.user_id}, ${!u.is_active})" class="px-4 py-2 rounded-xl bg-slate-900 text-white text-xs font-black">${u.is_active ? 'Blokuj' : 'Odblokuj'}</button></td></tr>`).join('');
                 document.getElementById('admin-bookings').innerHTML = data.bookings.map(b => `<tr><td class="py-4 font-black">${escapeHtml(b.venue_name)}</td><td>${escapeHtml(b.renter_username || '-')}</td><td>${bookingDateRange(b)}</td><td>${statusLabel(b.status)}</td><td>${b.payment_method === 'GOTOWKA' ? 'Gotówka' : 'Online'} / ${statusLabel(b.payment_status)}</td><td class="font-black">${money(b.total_cost)}</td><td>${money(b.platform_commission)}</td><td>${money(b.owner_payout)}</td></tr>`).join('');
-            } catch(e) { console.error(e); toast('Błąd połączenia z serwerem.', 'error'); }
+            } catch (e) { console.error(e); toast('Błąd połączenia z serwerem.', 'error'); }
         }
 
         async function toggleUserActive(id, active) {
-            const r = await fetch(`${API}/admin/users/${id}/`, { method:'PATCH', headers:{'Content-Type':'application/json','Authorization':`Token ${localStorage.getItem('token')}`}, body:JSON.stringify({ is_active:active }) });
+            const r = await fetch(`${API}/admin/users/${id}/`, { method: 'PATCH', headers: { 'Content-Type': 'application/json', 'Authorization': `Token ${localStorage.getItem('token')}` }, body: JSON.stringify({ is_active: active }) });
             const data = await r.json().catch(() => ({}));
             if (r.ok) { toast(active ? 'Użytkownik odblokowany.' : 'Użytkownik zablokowany.', 'success'); fetchAdminDashboard(); }
             else toast(apiError(data, 'Nie udało się zmienić statusu użytkownika.'), 'error');
         }
 
         async function changeUserRole(id, role) {
-            const r = await fetch(`${API}/admin/users/${id}/`, { method:'PATCH', headers:{'Content-Type':'application/json','Authorization':`Token ${localStorage.getItem('token')}`}, body:JSON.stringify({ role }) });
+            const r = await fetch(`${API}/admin/users/${id}/`, { method: 'PATCH', headers: { 'Content-Type': 'application/json', 'Authorization': `Token ${localStorage.getItem('token')}` }, body: JSON.stringify({ role }) });
             const data = await r.json().catch(() => ({}));
             if (r.ok) { toast('Rola użytkownika zmieniona.', 'success'); fetchAdminDashboard(); }
             else toast(apiError(data, 'Nie udało się zmienić roli.'), 'error');
@@ -1036,7 +1406,7 @@
 
         async function saveCommission() {
             const rate = document.getElementById('admin-commission').value;
-            const r = await fetch(`${API}/admin/config/`, { method:'PATCH', headers:{'Content-Type':'application/json','Authorization':`Token ${localStorage.getItem('token')}`}, body:JSON.stringify({ commission_rate:rate }) });
+            const r = await fetch(`${API}/admin/config/`, { method: 'PATCH', headers: { 'Content-Type': 'application/json', 'Authorization': `Token ${localStorage.getItem('token')}` }, body: JSON.stringify({ commission_rate: rate }) });
             const data = await r.json().catch(() => ({}));
             if (r.ok) { toast('Prowizja zapisana. Ceny w przeglądaniu zostały przeliczone.', 'success'); fetchAdminDashboard(); fetchVenues(); }
             else toast(apiError(data, 'Nie udało się zapisać prowizji.'), 'error');
@@ -1047,4 +1417,5 @@
         checkAuth();
     </script>
 </body>
+
 </html>
