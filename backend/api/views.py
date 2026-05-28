@@ -2,6 +2,8 @@ import os
 from decimal import Decimal, InvalidOperation, ROUND_HALF_UP
 from collections import defaultdict
 
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.db import transaction
@@ -261,6 +263,15 @@ def register_view(request):
 
     if not username or not email or not password:
         return error_response('Wypełnij login, e-mail i hasło.', status.HTTP_400_BAD_REQUEST)
+    
+    try:
+        validate_email(email)
+    except ValidationError:
+        return error_response(
+            'Podaj poprawny adres e-mail, np. nazwa@example.com.',
+            status.HTTP_400_BAD_REQUEST,
+            field='email'
+        )
 
     if role not in PUBLIC_ROLES:
         return error_response('Wybierz poprawny typ konta: najemca albo właściciel.', field='role')
@@ -364,7 +375,10 @@ def get_cities(request):
 @parser_classes([MultiPartParser, FormParser])
 def get_venues(request):
     if request.method == 'GET':
-        venues = Venues.objects.select_related('city__province', 'owner').filter(is_active=True).order_by('-venue_id')
+        venues = Venues.objects.select_related('city__province', 'owner').filter(
+            is_active=True,
+            owner__role__in=[Users.ROLE_OWNER, Users.ROLE_ADMIN],
+        ).order_by('-venue_id')
         serializer = VenueSerializer(venues, many=True, context={'request': request})
         return Response(serializer.data)
 
@@ -503,7 +517,11 @@ def my_venues(request):
 @permission_classes([AllowAny])
 def get_venue_detail(request, pk):
     try:
-        venue = Venues.objects.select_related('owner', 'city__province').get(venue_id=pk, is_active=True)
+        venue = Venues.objects.select_related('owner', 'city__province').get(
+            venue_id=pk,
+            is_active=True,
+            owner__role__in=[Users.ROLE_OWNER, Users.ROLE_ADMIN],
+        )
     except Venues.DoesNotExist:
         return error_response('Taki lokal nie istnieje.', status.HTTP_404_NOT_FOUND)
 
@@ -523,9 +541,15 @@ def get_venue_detail(request, pk):
     if not (is_owner or is_admin):
         return error_response('Brak uprawnień – nie jesteś właścicielem tego lokalu ani administratorem.', status.HTTP_403_FORBIDDEN)
 
-    venue.is_active = False
-    venue.save(update_fields=['is_active'])
-    return Response({'message': 'Lokal ukryty z widoku publicznego.'}, status=status.HTTP_200_OK)
+    with transaction.atomic():
+        deleted_count, _ = Bookings.objects.filter(venue=venue).delete()
+
+        venue.is_active = False
+        venue.save(update_fields=['is_active'])
+
+    return Response({
+        'message': f'Lokal ukryty z widoku publicznego. Usunięto rezerwacje: {deleted_count}.'
+    }, status=status.HTTP_200_OK)
 
 
 @api_view(['GET', 'POST'])
@@ -594,7 +618,11 @@ def booking_list_or_create(request):
         return error_response('Wybierz lokal oraz datę rozpoczęcia i zakończenia.', status.HTTP_400_BAD_REQUEST)
 
     try:
-        venue = Venues.objects.get(venue_id=venue_id, is_active=True)
+        venue = Venues.objects.get(
+            venue_id=venue_id,
+            is_active=True,
+            owner__role__in=[Users.ROLE_OWNER, Users.ROLE_ADMIN],
+        )
     except (Venues.DoesNotExist, ValueError, TypeError):
         return error_response('Wybrany lokal nie istnieje.', status.HTTP_404_NOT_FOUND)
 
